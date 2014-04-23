@@ -1,45 +1,325 @@
-<!doctype html>
-<html>
-<head>
-<title>pubphoto</title>
-<meta name="viewport" content="width=device-width">
-<style>
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <!-- Use title if it's in the page YAML frontmatter -->
+        <title>Pubshare</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="/megapix-image.js"></script>
+        <script src="/spin.js"></script>
+
+        <link href='http://fonts.googleapis.com/css?family=Bitter:400,700' rel='stylesheet' type='text/css'>
+
+    </head>
+    <style type="text/css">
+
+html,
+button,
+input,
+select,
+textarea {
+    color: #222;
+}
+
+body {
+    font-size: 1em;
+    line-height: 1.4;
+}
+
+::-moz-selection {
+    background: #b3d4fc;
+    text-shadow: none;
+}
+
+::selection {
+    background: #b3d4fc;
+    text-shadow: none;
+}
+
+
+img {
+    vertical-align: middle;
+}
+
+fieldset {
+    border: 0;
+    margin: 0;
+    padding: 0;
+}
+
+textarea {
+    resize: vertical;
+}
+
+.chromeframe {
+    margin: 0.2em 0;
+    background: #ccc;
+    color: #000;
+    padding: 0.2em 0;
+}
+
+
+/* ==========================================================================
+   Custom styles
+   ========================================================================== */
+
 html, body {
     padding: 0;
     margin: 0;
 }
+
+/*----- Header -----*/
+
+#header {
+    position:fixed;
+    font-family: "Bitter", sans-serif;
+    font-size: 1em;
+    font-weight: 400;
+    top: 0;
+    z-index:1;
+    height:48px;
+    width:100%;
+    color:white;
+    background-color: #2A8DCB;
+    box-shadow:0 0 2px 0 rgba(0,0,0,0.4);
+}
+
+.header-items {
+    width: 90%;
+    float: left;
+    margin-left: 5%;
+}
+
+.header-title, .header-link {
+    float: left;
+    display: inline-block;
+    color: white;
+    height: 32px;
+    line-height: 1em;
+    margin-left: 0.8em;
+    padding-left: 0.8em;
+    padding-right: 0.8em;
+    text-shadow:0px 1px rgba(0,0,0,0.2);
+}
+
+.header-link:hover {
+    opacity: 0.7;
+    transition:ease 200ms;
+    -webkit-transition:ease 200ms;
+}
+
+.header-link:active {
+    opacity: 0.7;
+}
+
+.header-emblem {
+    float: right;
+    display: inline-block;
+    opacity:1.0;
+    height: 32px;
+    margin: 0.7em 2em auto 2em;
+}
+
+.header-emblem:hover {
+    opacity: 0.7;
+    transition:ease 200ms;
+    -webkit-transition:ease 200ms;
+}
+
+.logo {
+    float: left;
+    display: inline-block;
+    margin-top:8px;
+    margin-left: 0.5em;
+    height:32px;
+}
+
+/*------ Page -----*/
+
 .page {
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
-    background: #ccf;
-    max-width: 800px;
+    padding-top: 64px;
+    background: #f3f3f3;
+    width: 100%;
     display: none;
 }
 
 .page.active {
     display: block;
+    transition:ease-in 200ms;
 }
 
-#front button {
+.page-content {
     position: absolute;
-    left: 5%;
+    margin: auto 5%;
     width: 90%;
+    font-family: "Bitter", sans-serif;
+    font-weight: 400;
+    font-size: 1.5em;
+    text-align: center;
+    background-color: transparent;
+    color: #555;
+    text-shadow:0px 1px rgba(255,255,255,0.6);
 }
-#front #wanttoreceive {
-    top: 5%;
-    height: 65%;
+
+.secret-key {
+    font-size: 3em;
+    font-weight: 400;
+    padding: 0;
+    line-height: 1em;
 }
-#front #wanttosend {
-    top: 75%;
-    height: 20%;
+
+.recieve-title {
+    font-family: "Bitter", sans-serif;
+    text-shadow:0px 1px rgba(255,255,255,0.6);
+    font-weight: 400;
+    padding-top: 48px;
 }
+
+.key {
+    font-family: "Bitter", sans-serif;
+    font-weight: 400;
+    color: #555;
+    font-size: 2em;
+    margin: 0 auto;
+    text-align: center;
+    width: 40%;
+    display: block;
+    background-color: #fff;
+    margin-top: 64px;
+    padding: 0.25em;
+    border-radius: 4px;
+    box-shadow:inset 0 4px 0 0 rgba(0,0,0,0.2);
+}
+
+#wait_for_transmission button, #front button {
+    position: absolute;
+    margin: auto 5%;
+    width: 90%;
+    -webkit-border-radius:4px;
+    -moz-border-radius:4px;
+    border-radius:4px;
+    box-shadow:inset 0 -4px 0 0 rgba(0,0,0,0.2);
+    outline: none;
+    border: none;
+    padding-bottom: 4px;
+}
+
+#wait_for_transmission button:active, #front button:active {
+    box-shadow:inset 0 4px 0 0 rgba(0,0,0,0.2);
+    padding-top: 4px;
+}
+
+.button-text {
+    display: block;
+    font-family: "Bitter", sans-serif;
+    font-weight: 400;
+    font-size:1.5em;
+    line-height:2em;
+    font-weight:400;
+    text-align:center;
+    text-decoration:none;
+    text-shadow:0px 1px rgba(0, 0, 0, 0.3);
+    color:white;
+}
+
+.button-icon-fill {
+    fill:#fff; 
+}
+
+.button-icon-shadow {
+    fill:#000;
+    opacity:0.2; 
+}
+
+.custom-file-input {
+    color: transparent;
+    outline: none;
+    border:none;
+}
+
+.custom-file-input::-webkit-file-upload-button {
+    visibility: hidden;
+}
+
+.custom-file-input::before {
+    margin: auto 5%;
+    width: 90%;
+    padding-top: 15%;
+    padding-bottom: 15.2%;
+    content: 'Take or Choose a Photo';
+    font-family: "Bitter", sans-serif;
+    font-weight: 400;
+    font-size: 1.5em;
+    text-align:center;
+    text-decoration:none;
+    text-shadow:0px 1px rgba(0, 0, 0, 0.3);
+    color:white;
+    display: inline-block;
+    background: #E63D4E;
+    -webkit-border-radius:4px;
+    -moz-border-radius:4px;
+    border-radius:4px;
+    box-shadow:inset 0 -4px 0 0 rgba(0,0,0,0.2);
+    outline: none;
+    border: none;
+    position: absolute;
+    white-space: nowrap;
+    -webkit-user-select: none;
+    cursor: pointer;
+}
+
+.custom-file-input:active::before {
+    box-shadow:inset 0 4px 0 0 rgba(0,0,0,0.2);
+    padding-top: 15.2%;
+    padding-bottom: 15%;
+}
+
+#recieve {
+    height: 50%;
+    background: #F58735;
+}
+
+#download {
+    height: 30%;
+    background: #0F9D58;
+}
+
+#send {
+    top: 65%;
+    height: 30%;
+    background: #E63D4E;
+}
+
+/*--- Keypad Buttons ---*/
 
 .buttons button {
     position: absolute;
     width: 22%;
     height: 11%;
-    font-size: 30px;
+    font-family: "Bitter", sans-serif;
+    font-weight: 400;
+    font-size: 2em;
     text-align: center;
+    -webkit-border-radius:0.125em;
+    -moz-border-radius:0.125em;
+    border-radius:0.125em;
+    box-shadow:inset 0 -0.125em 0 0 rgba(0,0,0,0.2);
+    outline: none;
+    border: none;
+    padding-bottom: 0.125em;
+    background-color: #777;
+    color:white;
 }
 
 .buttons h2, .buttons h3 {
@@ -66,37 +346,184 @@ html, body {
 .buttons button:nth-of-type(4n+2) { left: 26%; }
 .buttons button:nth-of-type(4n+3) { left: 50%; }
 .buttons button:nth-of-type(4n) { left: 74%; }
+
+/*----- Recieved Image -----*/
+
+.recieved-image {
+    margin: auto 5%;
+    width: 90%;
+    border-radius: 0.5em;
+}
+
+/*----- Modal Dialog -----*/
+
+.modal {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(0,0,0,0.3);
+    z-index: 99999;
+    opacity:0;
+    -webkit-transition: opacity 200ms ease-in;
+    -moz-transition: opacity 200ms ease-in;
+    transition: opacity 200ms ease-in;
+    pointer-events: none;
+}
+
+.modal:target {
+    opacity:1;
+    pointer-events: auto;
+}
+
+.modal > div {
+    font-family: "Bitter", sans-serif;
+    font-weight: 400;
+    width: 70%;
+    position: relative;
+    font-size: 1em;
+    line-height: 1.6em;
+    margin: 15% auto;
+    padding:1em 2em;
+    border-radius: 0.5em;
+    color: #555;
+    background: #fff;
+    box-shadow: 0 5px 10px -5px rgba(0,0,0,0.8);
+}
+
+.modal > div a {
+    color: #2A8DCB;
+    text-decoration: none;
+    outline: none;
+    border:none;
+}
+
+.modal > div a:hover {
+    opacity: 0.7;
+}
+
+.close, a .close {
+    position: absolute;
+    float: right;
+    top:-12px;
+    left:-12px;
+    height: 24px;
+    width: 24px;
+    text-decoration: none;
+    outline: none;
+    border:none;
+}
+
+.close-icon-fill {
+    fill:#fff; 
+}
+
+.close-icon-back {
+    fill:#000;
+    opacity:0.8; 
+}
+
 </style>
-<body>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
+        <![endif]-->
+
+        <div id="header">
+    <div class="header-items">
+    	<span class="logo"><svg height="32" width="32" version="1.1" xmlns="http://www.w3.org/2000/svg" style="overflow: hidden; position: relative;" >
+  <path
+  	 class="button-icon-shadow"
+     d="m15 3.6562c-4.6717 0-8.4928 3.5703-8.9375 8.125-2.3087 0.443-4.0625 2.438-4.0625 4.875 0 2.7613 2.2387 5 5 5v-3.906c-0.5876-0.322-1-0.936-1-1.656v-0.1875c0-1.056 0.8502-1.906 1.9062-1.906h16.188c1.056 0 1.906 0.85 1.906 1.906v0.1875c0 0.72011-0.41241 1.3338-1 1.6562v3.5938c2.8775-0.87112 5-3.5273 5-6.6875 0-3.866-3.134-7-7-7-0.16867 0-0.33433 0.0505-0.5 0.0625-1.607-2.4566-4.345-4.0618-7.5-4.0618zm-6 11.344h-1v14c0 0.554 0.446 1 1 1h14c0.554 0 1-0.446 1-1v-14h-1zm1 1h12v10h-12zm4 3-3 3v3h10v-3l-2-2-2 2z" />
+  <path
+  	 class="button-icon-fill"
+     d="m15 2.6562c-4.6717 0-8.4928 3.5703-8.9375 8.125-2.3087 0.443-4.0625 2.438-4.0625 4.875 0 2.7613 2.2387 5 5 5v-3.906c-0.5876-0.322-1-0.936-1-1.656v-0.1875c0-1.056 0.8502-1.906 1.9062-1.906h16.188c1.056 0 1.906 0.85 1.906 1.906v0.1875c0 0.72011-0.41241 1.3338-1 1.6562v3.5938c2.8775-0.87112 5-3.5273 5-6.6875 0-3.866-3.134-7-7-7-0.16867 0-0.33433 0.0505-0.5 0.0625-1.607-2.4566-4.345-4.0618-7.5-4.0618zm-6 11.344h-1v14c0 0.554 0.446 1 1 1h14c0.554 0 1-0.446 1-1v-14h-1zm1 1h12v10h-12zm4 3-3 3v3h10v-3l-2-2-2 2z" />
+</svg></span>
+        <p class="header-title">Pubshare</p>
+        <a class="header-emblem" href="#about"><svg height="24" width="24" version="1.1" xmlns="http://www.w3.org/2000/svg" style="overflow: hidden; position: relative;" >
+  <path
+  	 class="button-icon-shadow"
+     d="m 11.63,3.01 c 3.2833,-0.18391 6.1881,2.339 6.372,5.6223 -2e-4,2.8014 -0.75506,3.8417 -3.186,5.6848 -0.38168,0.28715 -0.65089,0.50097 -0.74965,0.62471 -0.0987,0.12414 -0.0624,0.0666 -0.0624,0.0624 0.014,1.0561 -0.94281,1.999 -1.999,1.999 -1.05619,0 -2.013,-0.94293 -1.9991,-1.999 0,-1.0043 0.44827,-1.886 0.93706,-2.4988 0.48879,-0.61297 0.98214,-1.0323 1.4368,-1.3744 0.40791,-0.32097 0.92123,-0.76872 1.3744,-1.3119 0.18691,-0.22409 0.25788,-0.61503 0.24988,-0.87459 v -0.0624 c -0.0632,-1.1259 -0.99805,-1.9373 -2.124,-1.8741 -1.12595,0.0632 -1.9373,0.87311 -1.8741,1.999 0,1.9991 -1.999,1.9991 -1.999,1.9991 0,0 -1.9991,0 -1.9991,-1.9991 -0.18391,-3.2833 2.339,-5.813 5.6223,-5.9972 z m 0.37483,15.992 c 1.104,0 1.999,0.89502 1.999,1.999 0,1.10398 -0.89501,1.9991 -1.999,1.9991 -1.10399,0 -1.9991,-0.89502 -1.9991,-1.9991 0,-1.104 0.89502,-1.999 1.9991,-1.999 z" />
+  <path
+  	 class="button-icon-fill"
+     d="m 11.63,2.01 c 3.2833,-0.18391 6.1881,2.339 6.372,5.6223 -2e-4,2.8014 -0.75506,3.8417 -3.186,5.6848 -0.38168,0.28715 -0.65089,0.50097 -0.74965,0.62471 -0.0987,0.12414 -0.0624,0.0666 -0.0624,0.0624 0.014,1.0561 -0.94281,1.999 -1.999,1.999 -1.05619,0 -2.013,-0.94293 -1.9991,-1.999 0,-1.0043 0.44827,-1.886 0.93706,-2.4988 0.48879,-0.61297 0.98214,-1.0323 1.4368,-1.3744 0.40791,-0.32097 0.92123,-0.76872 1.3744,-1.3119 0.18691,-0.22409 0.25788,-0.61503 0.24988,-0.87459 v -0.0624 c -0.0632,-1.1259 -0.99805,-1.9373 -2.124,-1.8741 -1.12595,0.0632 -1.9373,0.87311 -1.8741,1.999 0,1.9991 -1.999,1.9991 -1.999,1.9991 0,0 -1.9991,0 -1.9991,-1.9991 -0.18391,-3.2833 2.339,-5.813 5.6223,-5.9972 z m 0.37483,15.992 c 1.104,0 1.999,0.89502 1.999,1.999 0,1.10398 -0.89501,1.9991 -1.999,1.9991 -1.10399,0 -1.9991,-0.89502 -1.9991,-1.9991 0,-1.104 0.89502,-1.999 1.9991,-1.999 z" />
+</svg></a>
+    </div>
+</div>
+
 <div id="front" class="page active">
-<button id="wanttoreceive">Get sent a photo</button>
-<button id="wanttosend">Send a photo</button></p>
+	<button id="recieve"><svg height="96" width="96" version="1.1" xmlns="http://www.w3.org/2000/svg" style="overflow: hidden; position: relative;" >
+  <path
+  	 class="button-icon-shadow"
+     d="m51 8c-9.465 0-17.679 4.816-22.5 12.188-0.497-0.036-0.994-0.188-1.5-0.188-11.598 0-21 9.402-21 21 0 9.871 6.821 18.158 16 20.406v-10.968c-1.221-1.096-2-2.66-2-4.438 0-3.324 2.676-6 6-6h44c3.324 0 6 2.676 6 6 0 1.778-0.779 3.342-2 4.438v11.562h1c8.284 0 15-6.716 15-15 0-7.312-5.262-13.297-12.188-14.625-1.334-13.664-12.797-24.375-26.812-24.375zm-25 34c-1.108 0-2 0.892-2 2v44c0 1.108 0.892 2 2 2h44c1.108 0 2-0.892 2-2v-44c0-1.108-0.892-2-2-2h-44zm6 8h32v28h-32v-28zm11 6v9h-5l10 11 10-11h-5v-9h-10z" />
+  <path
+  	 class="button-icon-fill"
+     d="m51 7c-9.465 0-17.679 4.816-22.5 12.188-0.497-0.036-0.994-0.188-1.5-0.188-11.598 0-21 9.402-21 21 0 9.871 6.821 18.158 16 20.406v-10.968c-1.221-1.096-2-2.66-2-4.438 0-3.324 2.676-6 6-6h44c3.324 0 6 2.676 6 6 0 1.778-0.779 3.342-2 4.438v11.562h1c8.284 0 15-6.716 15-15 0-7.312-5.262-13.297-12.188-14.625-1.334-13.664-12.797-24.375-26.812-24.375zm-25 34c-1.108 0-2 0.892-2 2v44c0 1.108 0.892 2 2 2h44c1.108 0 2-0.892 2-2v-44c0-1.108-0.892-2-2-2h-44zm6 8h32v28h-32v-28zm11 6v9h-5l10 11 10-11h-5v-9h-10z" />
+</svg><span class="button-text">Recieve a Photo</span></button>
+	<button id="send"><svg height="96" width="96" version="1.1" xmlns="http://www.w3.org/2000/svg" style="overflow: hidden; position: relative;" >
+  <path
+  	 class="button-icon-shadow"
+     d="m45 8c-14.015 0-25.478 10.711-26.812 24.375-6.926 1.328-12.188 7.313-12.188 14.625 0 8.284 6.716 15 15 15h1v-11.562c-1.221-1.096-2-2.66-2-4.438 0-3.324 2.676-6 6-6h44c3.324 0 6 2.676 6 6 0 1.778-0.779 3.342-2 4.438v10.968c9.179-2.248 16-10.535 16-20.406 0-11.598-9.402-21-21-21-0.506 0-1.003 0.152-1.5 0.188-4.821-7.372-13.035-12.188-22.5-12.188zm-19 34c-1.108 0-2 0.892-2 2v44c0 1.108 0.892 2 2 2h44c1.108 0 2-0.892 2-2v-44c0-1.108-0.892-2-2-2h-44zm6 8h32v28h-32v-28zm16 4l-10 11h5v9h10v-9h5l-10-11z" />
+  <path
+  	 class="button-icon-fill"
+     d="m45 7c-14.015 0-25.478 10.711-26.812 24.375-6.926 1.328-12.188 7.313-12.188 14.625 0 8.284 6.716 15 15 15h1v-11.562c-1.221-1.096-2-2.66-2-4.438 0-3.324 2.676-6 6-6h44c3.324 0 6 2.676 6 6 0 1.778-0.779 3.342-2 4.438v10.968c9.179-2.248 16-10.535 16-20.406 0-11.598-9.402-21-21-21-0.506 0-1.003 0.152-1.5 0.188-4.821-7.372-13.035-12.188-22.5-12.188zm-19 34c-1.108 0-2 0.892-2 2v44c0 1.108 0.892 2 2 2h44c1.108 0 2-0.892 2-2v-44c0-1.108-0.892-2-2-2h-44zm6 8h32v28h-32v-28zm16 4l-10 11h5v9h10v-9h5l-10-11z" />
+</svg><span class="button-text">Send a Photo</span></button>
+</div>
+
+<!-- About -->
+<div id="about" class="modal">
+    <div>
+        <a href="#" class="close"><span><svg height="24" width="24" version="1.1" xmlns="http://www.w3.org/2000/svg" style="overflow: hidden; position: relative;" >
+  <path
+  	 class="close-icon-back"
+     d="M 23,12 A 11,11 0 0 1 1,12 11,11 0 1 1 23,12 z" />
+  <path
+  	 class="close-icon-fill"
+     d="M 12,0 C 5.3726,0 0,5.3726 0,12 0,18.627 5.3726,24 12,24 18.627,24 24,18.627 24,12 24,5.3726 18.627,0 12,0 z m 0,2 C 17.523,2 22,6.4772 22,12 22,17.523 17.523,22 12,22 6.4772,22 2,17.523 2,12 2,6.4772 6.4772,2 12,2 z M 8,8 V 9 C 8,9.277 8.1005,9.538 8.2812,9.7188 L 10.562,12 8.2812,14.281 C 8.1005,14.462 8.0994,14.741 8,15 v 1 h 1 c 0.277,0 0.538,-0.1005 0.71875,-0.28125 l 2.2812,-2.281 2.281,2.281 c 0.181,0.181 0.454,0.201 0.719,0.281 h 1 v -1 c 0,-0.277 -0.1005,-0.538 -0.28125,-0.71875 L 13.4377,12 15.7187,9.7188 C 15.8997,9.538 15.9997,9.277 15.9997,9 V 8 h -1 c -0.277,0 -0.538,0.1005 -0.719,0.2812 L 11.9997,10.562 9.7185,8.2812 C 9.5377,8.1005 9.2767,8 8.9997,8 z" />
+</svg></span></a>
+        <h1>Pubshare</h1>
+        <p>A simple way to share just-taken photos with people.</p>
+        <p>Pubshare is open source &amp; is licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0.html" target="_blank">Apache License 2.0</a></p>
+        <p>Created by <a href="http://kryogenix.org" target="_blank">Stuart Langridge</a> &amp; designed by <a href="http://snwh.org" target="_blank">Sam Hewitt</a></p>
+    </div>
 </div>
 
 <div id="receivep1" class="page buttons">
-<h2>Touch the first character</h2>
-<h3>_ _</h3>
+	<h2 class="recieve-title">Enter your secret key.</h2>
+	<h1 class="key">_ _</h1>
 </div>
+
 <div id="receivep2" class="page buttons">
-<h2>Touch the second character</h2>
-<h3>? _</h3>
+	<h2 class="recieve-title">Enter your secret key.</h2>
+	<h1 class="key">? _</h1>
 </div>
 
 <div id="wait_for_transmission" class="page">
-waiting for transmission.... <button id="download">download</button> data is: <strong><img></strong>
+	<button id="download"><svg height="96" width="96" version="1.1" xmlns="http://www.w3.org/2000/svg" style="overflow: hidden; position: relative;" >
+  <path
+  	 class="button-icon-shadow"
+     d="m51 8c-9.465 0-17.679 4.816-22.5 12.188-0.497-0.036-0.994-0.188-1.5-0.188-11.598 0-21 9.402-21 21 0 9.871 6.821 18.158 16 20.406v-10.968c-1.221-1.096-2-2.66-2-4.438 0-3.324 2.676-6 6-6h44c3.324 0 6 2.676 6 6 0 1.778-0.779 3.342-2 4.438v11.562h1c8.284 0 15-6.716 15-15 0-7.312-5.262-13.297-12.188-14.625-1.334-13.664-12.797-24.375-26.812-24.375zm-25 34c-1.108 0-2 0.892-2 2v44c0 1.108 0.892 2 2 2h44c1.108 0 2-0.892 2-2v-44c0-1.108-0.892-2-2-2h-44zm6 8h32v28h-32v-28zm11 6v9h-5l10 11 10-11h-5v-9h-10z" />
+  <path
+  	 class="button-icon-fill"
+     d="m51 7c-9.465 0-17.679 4.816-22.5 12.188-0.497-0.036-0.994-0.188-1.5-0.188-11.598 0-21 9.402-21 21 0 9.871 6.821 18.158 16 20.406v-10.968c-1.221-1.096-2-2.66-2-4.438 0-3.324 2.676-6 6-6h44c3.324 0 6 2.676 6 6 0 1.778-0.779 3.342-2 4.438v11.562h1c8.284 0 15-6.716 15-15 0-7.312-5.262-13.297-12.188-14.625-1.334-13.664-12.797-24.375-26.812-24.375zm-25 34c-1.108 0-2 0.892-2 2v44c0 1.108 0.892 2 2 2h44c1.108 0 2-0.892 2-2v-44c0-1.108-0.892-2-2-2h-44zm6 8h32v28h-32v-28zm11 6v9h-5l10 11 10-11h-5v-9h-10z" />
+</svg><span class="button-text">Download Photo</span></button>
+	<img class="recieved-image">
 </div>
 
 <div id="sendp1" class="page">
-upload image: <input type="file" xcapture="camera" xcapture accept="image/*" id="cameraInput">
-</div>
-<div id="sendp2" class="page">
-<p>Tell the user to go to pubphoto.com and then press "Receive" then 
-"<span id="slot1">?</span>" then "<span id="slot2">?</span>"</p>
-<p id="send_status">waiting for them to do it...</p>
+	<input class="custom-file-input" type="file" xcapture="camera" xcapture accept="image/*" id="cameraInput">
 </div>
 
-<script src="/socket.io/socket.io.js"></script>
-<script src="/megapix-image.js"></script>
+<div id="sendp2" class="page">
+	<div class="page-content">
+		<p>Tell the recipient of your photo to visit Pubshare.com &amp; press "Receive a Photo"</p>
+		<p>Their secret key is: </p>
+		<p class="secret-key">"<span id="slot1">?</span> <span id="slot2">?</span>"</p>
+		<p id="send_status"></p>
+	</div>
+</div>
+
 <script>
 
 var CHARS = "0123456789ACFHNRUWXY".split(""),
@@ -104,7 +531,7 @@ var CHARS = "0123456789ACFHNRUWXY".split(""),
     rp2 = document.getElementById("receivep2"),
     rp1h2 = rp1.getElementsByTagName("h2")[0],
     rp2h2 = rp2.getElementsByTagName("h2")[0],
-    rp2h3 = rp2.getElementsByTagName("h3")[0];
+    rp2h3 = rp2.getElementsByTagName("h1")[0];
 CHARS.forEach(function(c) {
     var b1 = document.createElement("button"),
         b2 = document.createElement("button");
@@ -140,7 +567,7 @@ var socket = io.connect('/');
 socket.on("servererror", serverErrorHandler);
 socket.on("error", socketErrorHandler);
 
-document.getElementById("wanttosend").addEventListener("click", function(e) {
+document.getElementById("send").addEventListener("click", function(e) {
     // show send screen
     document.getElementById("front").classList.remove("active");
     document.getElementById("sendp1").classList.add("active");
@@ -154,9 +581,9 @@ document.getElementById("wanttosend").addEventListener("click", function(e) {
         console.log("got a slot answer", data, "and now waiting for transmit_now");
         socket.on('transmit_now', function () {
             socket.on('got_all', function () {
-                document.getElementById("send_status").firstChild.nodeValue = "they've got the photo. done.";
+                document.getElementById("send_status").firstChild.nodeValue = "Received!";
             });
-            document.getElementById("send_status").firstChild.nodeValue = "they've done it, now sending";
+            document.getElementById("send_status").firstChild.nodeValue = "Sending...";
             console.log("got transmit_now; now transmitting data url");
             var slices = dataurl.match(/.{1,10240}/g);
             for (var i=0; i<slices.length; i++) {
@@ -215,7 +642,7 @@ ci.addEventListener("change", function(e) {
     }
 }, false);
 
-document.getElementById("wanttoreceive").addEventListener("click", function(e) {
+document.getElementById("recieve").addEventListener("click", function(e) {
     // Show receive first screen
     document.getElementById("front").classList.remove("active");
     document.getElementById("receivep1").classList.add("active");
