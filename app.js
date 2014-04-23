@@ -2,7 +2,8 @@ var app = require('express')()
   , server = require('http').createServer(app)
   , io = require('socket.io').listen(server);
 
-server.listen(3006);
+var port = process.env.PORT || 3006;
+server.listen(port);
 
 var CHARS = "0123456789ACFHNRUWXY".split("");
 
