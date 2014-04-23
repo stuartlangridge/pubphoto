@@ -1,0 +1,244 @@
+<!doctype html>
+<html>
+<head>
+<title>pubphoto</title>
+<meta name="viewport" content="width=device-width">
+<style>
+html, body {
+    padding: 0;
+    margin: 0;
+}
+.page {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: #ccf;
+    max-width: 800px;
+    display: none;
+}
+
+.page.active {
+    display: block;
+}
+
+#front button {
+    position: absolute;
+    left: 5%;
+    width: 90%;
+}
+#front #wanttoreceive {
+    top: 5%;
+    height: 65%;
+}
+#front #wanttosend {
+    top: 75%;
+    height: 20%;
+}
+
+.buttons button {
+    position: absolute;
+    width: 22%;
+    height: 11%;
+    font-size: 30px;
+    text-align: center;
+}
+
+.buttons h2, .buttons h3 {
+    position: absolute;
+    text-align: center;
+    left: 2%;
+    right: 2%;
+}
+
+.buttons h2 {
+    top: 2%;
+}
+.buttons h3 {
+    top: 18%;
+}
+
+.buttons button:nth-of-type(-n+20) { top: 87%; }
+.buttons button:nth-of-type(-n+16) { top: 74%; }
+.buttons button:nth-of-type(-n+12) { top: 61%; }
+.buttons button:nth-of-type(-n+8) { top: 48%; }
+.buttons button:nth-of-type(-n+4) { top: 35%; }
+
+.buttons button:nth-of-type(4n+1)   { left:  2%; }
+.buttons button:nth-of-type(4n+2) { left: 26%; }
+.buttons button:nth-of-type(4n+3) { left: 50%; }
+.buttons button:nth-of-type(4n) { left: 74%; }
+</style>
+<body>
+<div id="front" class="page active">
+<button id="wanttoreceive">Get sent a photo</button>
+<button id="wanttosend">Send a photo</button></p>
+</div>
+
+<div id="receivep1" class="page buttons">
+<h2>Touch the first character</h2>
+<h3>_ _</h3>
+</div>
+<div id="receivep2" class="page buttons">
+<h2>Touch the second character</h2>
+<h3>? _</h3>
+</div>
+
+<div id="wait_for_transmission" class="page">
+waiting for transmission.... <button id="download">download</button> data is: <strong><img></strong>
+</div>
+
+<div id="sendp1" class="page">
+upload image: <input type="file" xcapture="camera" xcapture accept="image/*" id="cameraInput">
+</div>
+<div id="sendp2" class="page">
+<p>Tell the user to go to pubphoto.com and then press "Receive" then 
+"<span id="slot1">?</span>" then "<span id="slot2">?</span>"</p>
+<p id="send_status">waiting for them to do it...</p>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/megapix-image.js"></script>
+<script>
+
+var CHARS = "0123456789ACFHNRUWXY".split(""),
+    rp1 = document.getElementById("receivep1"),
+    rp2 = document.getElementById("receivep2"),
+    rp1h2 = rp1.getElementsByTagName("h2")[0],
+    rp2h2 = rp2.getElementsByTagName("h2")[0],
+    rp2h3 = rp2.getElementsByTagName("h3")[0];
+CHARS.forEach(function(c) {
+    var b1 = document.createElement("button"),
+        b2 = document.createElement("button");
+    b1.appendChild(document.createTextNode(c));
+    b2.appendChild(document.createTextNode(c));
+    rp1.insertBefore(b1, rp1h2);
+    rp2.insertBefore(b2, rp2h2);
+    b1.addEventListener("click", function(e) {
+        rp2.classList.add("active");
+        rp1.classList.remove("active");
+        rp2h3.innerHTML = c + " _";
+        b2.style.display = "none"; /* so it can't be pressed twice by accident */
+    }, false);
+    b2.addEventListener("click", function(e) {
+        slot = rp2h3.innerHTML.charAt(0) + c;
+        rp2h3.innerHTML = rp2h3.innerHTML.charAt(0) + " " + c;
+        document.getElementById("wait_for_transmission").classList.add("active");
+        rp2.classList.remove("active");
+        console.log("Sending request_from_slot to slot", slot);
+        socket.emit("request_from_slot", {slot:slot});
+        console.log("Now waiting for transmission");
+    });
+});
+
+function serverErrorHandler(data) {
+    alert("got server error! " + data.text + " (" + data.code + ")");
+}
+function socketErrorHandler(data) {
+    alert("got socket error! " + JSON.stringify(data));
+}
+
+var socket = io.connect('/');
+socket.on("servererror", serverErrorHandler);
+socket.on("error", socketErrorHandler);
+
+document.getElementById("wanttosend").addEventListener("click", function(e) {
+    // show send screen
+    document.getElementById("front").classList.remove("active");
+    document.getElementById("sendp1").classList.add("active");
+
+    // set up socket
+    socket.on('slot_answer', function (data) {
+        document.getElementById("slot1").firstChild.nodeValue = data.slot.charAt(0);
+        document.getElementById("slot2").firstChild.nodeValue = data.slot.charAt(1);
+        document.getElementById("sendp1").classList.remove("active");
+        document.getElementById("sendp2").classList.add("active");
+        console.log("got a slot answer", data, "and now waiting for transmit_now");
+        socket.on('transmit_now', function () {
+            socket.on('got_all', function () {
+                document.getElementById("send_status").firstChild.nodeValue = "they've got the photo. done.";
+            });
+            document.getElementById("send_status").firstChild.nodeValue = "they've done it, now sending";
+            console.log("got transmit_now; now transmitting data url");
+            var slices = dataurl.match(/.{1,10240}/g);
+            for (var i=0; i<slices.length; i++) {
+                socket.emit("transmission", {seq: i+1, of: slices.length, data: slices[i]});
+            }
+        });
+    });
+}, false);
+
+if(!("url" in window) && ("webkitURL" in window)) { window.URL = window.webkitURL; }
+
+var dataurl;
+var ci = document.getElementById("cameraInput");
+ci.addEventListener("change", function(e) {
+    if (e.target.files.length == 1 && e.target.files[0].type.indexOf("image/") == 0) {
+    
+        var img = new Image();
+        img.onload = function() {
+            // fit image into 500x500 box
+            var targetwidth = 500, targetheight = 500;
+            var scalex1 = targetwidth, scaley1 = img.naturalHeight * targetwidth / img.naturalWidth,
+                scalex2 = img.naturalWidth * targetheight / img.naturalHeight, scaley2 = targetheight,
+                destwidth, destheight;
+            if (scalex2 > targetwidth) {
+                destwidth = Math.floor(scalex1), destheight = Math.floor(scaley1);
+            } else {
+                destwidth = Math.floor(scalex2), destheight = Math.floor(scaley2);
+            }
+            var c = document.createElement("canvas");
+            c.style.marginLeft = "10px";
+            c.style.position = "absolute";
+            c.style.border="3px solid red";
+            c.style.zIndex = "9";
+            //document.body.appendChild(c);
+            var ctx = c.getContext("2d");
+            c.width = destwidth;
+            c.height = destheight;
+
+            // Use megapiximage shim because iOS screws up image scaling in canvases. Le sigh.
+            var mp = new MegaPixImage(img);
+            mp.render(c, {width: destwidth, height: destheight});
+            dataurl = c.toDataURL("image/jpeg", 0.7);
+            //alert(img.naturalWidth + "," + img.naturalHeight + " : " + destwidth + "," + destheight + ", l:" + dataurl.length);
+            console.log("requesting slot");
+            socket.emit("request_slot");
+
+            var ii = document.createElement("img");
+            ii.style.marginLeft = "50px";
+            ii.style.position = "absolute";
+            ii.style.border="3px solid red";
+            ii.style.zIndex = "9";
+            ii.src = dataurl;
+            //document.body.appendChild(ii);
+        }
+        img.src = URL.createObjectURL(e.target.files[0]);
+    }
+}, false);
+
+document.getElementById("wanttoreceive").addEventListener("click", function(e) {
+    // Show receive first screen
+    document.getElementById("front").classList.remove("active");
+    document.getElementById("receivep1").classList.add("active");
+
+    // Set up socket to receive
+    var received = [], receivedCount = 0;
+    socket.on("transmission", function(data) {
+      console.log("Received data", data);
+      received[data.seq] = data.data;
+      receivedCount += 1;
+      if (receivedCount == data.of) {
+        var finaldata = received.join("");
+        console.log("Received all data OK:", finaldata.length, finaldata.substr(0,25));
+        document.querySelector("strong img").src = finaldata;
+        dataurl = finaldata;
+        socket.emit("got_all");
+      }
+    });
+}, false);
+
+document.getElementById("download").addEventListener("click", function(e) {
+    document.location.href = dataurl.replace("image/jpeg", "image/octet-stream");
+}, false);
+
+</script>
+

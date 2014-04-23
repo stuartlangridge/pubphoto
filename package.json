@@ -1,0 +1,23 @@
+{
+  "name": "pubphoto",
+  "version": "0.5.0",
+  "description": "A simple way to exchange just-taken photos in the pub with people you don't know",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/stuartlangridge/pubphoto.git"
+  },
+  "author": "Stuart Langridge <sil@kryogenix.org> (http://www.kryogenix.org/)",
+  "license": "Apache v2",
+  "bugs": {
+    "url": "https://github.com/stuartlangridge/pubphoto/issues"
+  },
+  "homepage": "https://github.com/stuartlangridge/pubphoto",
+  "dependencies": {
+    "express": "^4.0.0",
+    "socket.io": "^0.9.16"
+  }
+}
