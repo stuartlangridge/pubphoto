@@ -44,13 +44,13 @@ function shuffle(array) {
 setInterval(function() {
   var now = (new Date()).getTime();
   for (var k in SLOTS) {
-    if (SLOTS[k].allocated && ((now - SLOTS[k].timestamp) > 5000)) {
+    if (SLOTS[k].allocated && ((now - SLOTS[k].timestamp) > 60000)) {
       console.log("Clearing old slot", k);
       SLOTS[k].allocated = false;
       SLOTS[k].socket = null;
     }
   }
-}, 60000);
+}, 180000);
 
 //io.set('transports',['xhr-polling']);
 
@@ -93,7 +93,7 @@ io.sockets.on('connection', function (socket) {
             return socket.emit("servererror", {code: "bad_slot", text: "Bad slot specified"});
         }
         if (!SLOTS[data.slot].allocated) { 
-            return socket.emit("servererror", {code: "old_slot", text: "Slot timed out"});
+            return socket.emit("servererror", {code: "old_slot", text: "That code has run out. Ask them to send the image again."});
         }
         SLOTS[data.slot].receiver = socket.id;
         SLOTS[data.slot].timestamp = (new Date()).getTime();
@@ -103,10 +103,10 @@ io.sockets.on('connection', function (socket) {
   
     socket.on("transmission", function(data) {
         if (!SLOTS[slot].allocated) {
-            return socket.emit("servererror", {code: "old_slot", text: "Slot timed out"});
+            return socket.emit("servererror", {code: "old_slot", text: "That code has run out. Ask them to send the image again."});
         }
         if (!SLOTS[slot].receiver) {
-            return socket.emit("servererror", {code: "old_slot", text: "Slot timed out"});
+            return socket.emit("servererror", {code: "old_slot", text: "That code has run out. Ask them to send the image again."});
         }
         // retransmit the data to the receiver
         setTimeout(function() {
