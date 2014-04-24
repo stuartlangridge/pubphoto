@@ -13,8 +13,6 @@
 
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
-        <link rel="stylesheet" href="main.css">
-
         <script src="/socket.io/socket.io.js"></script>
         <script src="/megapix-image.js"></script>
 
@@ -181,7 +179,7 @@ html, body {
     line-height: 1em;
 }
 
-.recieve-title {
+.receive-title {
     font-family: "Bitter", sans-serif;
     text-shadow:0px 1px rgba(255,255,255,0.6);
     font-weight: 400;
@@ -287,7 +285,7 @@ html, body {
     padding-bottom: 15%;
 }
 
-#recieve {
+#receive {
     height: 50%;
     background: #F58735;
 }
@@ -349,10 +347,10 @@ html, body {
 .buttons button:nth-of-type(4n+3) { left: 50%; }
 .buttons button:nth-of-type(4n) { left: 74%; }
 
-/*----- Recieved Image -----*/
+/*----- received Image -----*/
 
-.recieved-image {
-    margin: auto 5%;
+.received-image {
+    margin: 15% 5% auto 5%;
     width: 90%;
     border-radius: 0.5em;
 }
@@ -455,14 +453,14 @@ html, body {
 </div>
 
 <div id="front" class="page active">
-	<button id="recieve"><svg height="96" width="96" version="1.1" xmlns="http://www.w3.org/2000/svg" style="overflow: hidden; position: relative;" >
+	<button id="receive"><svg height="96" width="96" version="1.1" xmlns="http://www.w3.org/2000/svg" style="overflow: hidden; position: relative;" >
   <path
   	 class="button-icon-shadow"
      d="m51 8c-9.465 0-17.679 4.816-22.5 12.188-0.497-0.036-0.994-0.188-1.5-0.188-11.598 0-21 9.402-21 21 0 9.871 6.821 18.158 16 20.406v-10.968c-1.221-1.096-2-2.66-2-4.438 0-3.324 2.676-6 6-6h44c3.324 0 6 2.676 6 6 0 1.778-0.779 3.342-2 4.438v11.562h1c8.284 0 15-6.716 15-15 0-7.312-5.262-13.297-12.188-14.625-1.334-13.664-12.797-24.375-26.812-24.375zm-25 34c-1.108 0-2 0.892-2 2v44c0 1.108 0.892 2 2 2h44c1.108 0 2-0.892 2-2v-44c0-1.108-0.892-2-2-2h-44zm6 8h32v28h-32v-28zm11 6v9h-5l10 11 10-11h-5v-9h-10z" />
   <path
   	 class="button-icon-fill"
      d="m51 7c-9.465 0-17.679 4.816-22.5 12.188-0.497-0.036-0.994-0.188-1.5-0.188-11.598 0-21 9.402-21 21 0 9.871 6.821 18.158 16 20.406v-10.968c-1.221-1.096-2-2.66-2-4.438 0-3.324 2.676-6 6-6h44c3.324 0 6 2.676 6 6 0 1.778-0.779 3.342-2 4.438v11.562h1c8.284 0 15-6.716 15-15 0-7.312-5.262-13.297-12.188-14.625-1.334-13.664-12.797-24.375-26.812-24.375zm-25 34c-1.108 0-2 0.892-2 2v44c0 1.108 0.892 2 2 2h44c1.108 0 2-0.892 2-2v-44c0-1.108-0.892-2-2-2h-44zm6 8h32v28h-32v-28zm11 6v9h-5l10 11 10-11h-5v-9h-10z" />
-</svg><span class="button-text">Recieve a Photo</span></button>
+</svg><span class="button-text">Receive a Photo</span></button>
 	<button id="send"><svg height="96" width="96" version="1.1" xmlns="http://www.w3.org/2000/svg" style="overflow: hidden; position: relative;" >
   <path
   	 class="button-icon-shadow"
@@ -492,12 +490,12 @@ html, body {
 </div>
 
 <div id="receivep1" class="page buttons">
-	<h2 class="recieve-title">Enter your secret key.</h2>
+	<h2 class="receive-title">Enter your secret key.</h2>
 	<h1 class="key">_ _</h1>
 </div>
 
 <div id="receivep2" class="page buttons">
-	<h2 class="recieve-title">Enter your secret key.</h2>
+	<h2 class="receive-title">Enter your secret key.</h2>
 	<h1 class="key">? _</h1>
 </div>
 
@@ -510,7 +508,7 @@ html, body {
   	 class="button-icon-fill"
      d="m51 7c-9.465 0-17.679 4.816-22.5 12.188-0.497-0.036-0.994-0.188-1.5-0.188-11.598 0-21 9.402-21 21 0 9.871 6.821 18.158 16 20.406v-10.968c-1.221-1.096-2-2.66-2-4.438 0-3.324 2.676-6 6-6h44c3.324 0 6 2.676 6 6 0 1.778-0.779 3.342-2 4.438v11.562h1c8.284 0 15-6.716 15-15 0-7.312-5.262-13.297-12.188-14.625-1.334-13.664-12.797-24.375-26.812-24.375zm-25 34c-1.108 0-2 0.892-2 2v44c0 1.108 0.892 2 2 2h44c1.108 0 2-0.892 2-2v-44c0-1.108-0.892-2-2-2h-44zm6 8h32v28h-32v-28zm11 6v9h-5l10 11 10-11h-5v-9h-10z" />
 </svg><span class="button-text">Download Photo</span></button>
-	<div class="recieved-image"><img></div>
+	<div class="received-image"><img></div>
 </div>
 
 <div id="sendp1" class="page">
@@ -522,7 +520,7 @@ html, body {
 		<p>Tell the recipient of your photo to visit Pubshare.com &amp; press "Receive a Photo"</p>
 		<p>Their secret key is: </p>
 		<p class="secret-key">"<span id="slot1">?</span> <span id="slot2">?</span>"</p>
-		<p id="send_status"></p>
+		<p id="send_status">waiting for them to start&hellip;</p>
 	</div>
 </div>
 
@@ -644,7 +642,7 @@ ci.addEventListener("change", function(e) {
     }
 }, false);
 
-document.getElementById("recieve").addEventListener("click", function(e) {
+document.getElementById("receive").addEventListener("click", function(e) {
     // Show receive first screen
     document.getElementById("front").classList.remove("active");
     document.getElementById("receivep1").classList.add("active");
@@ -658,7 +656,7 @@ document.getElementById("recieve").addEventListener("click", function(e) {
       if (receivedCount == data.of) {
         var finaldata = received.join("");
         console.log("Received all data OK:", finaldata.length, finaldata.substr(0,25));
-        document.querySelector("img").src = finaldata;
+        document.querySelector(".received-image img").src = finaldata;
         dataurl = finaldata;
         socket.emit("got_all");
       }
