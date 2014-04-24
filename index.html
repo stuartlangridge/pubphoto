@@ -202,7 +202,7 @@ html, body {
     box-shadow:inset 0 4px 0 0 rgba(0,0,0,0.2);
 }
 
-#wait_for_transmission button, #front button {
+#wait_for_transmission a, #front button {
     position: absolute;
     margin: auto 5%;
     width: 90%;
@@ -213,6 +213,7 @@ html, body {
     outline: none;
     border: none;
     padding-bottom: 4px;
+    text-decoration: none;
 }
 
 #wait_for_transmission button:active, #front button:active {
@@ -424,6 +425,16 @@ html, body {
     opacity:0.8; 
 }
 
+#wait_for_transmission.waiting .waiting { display: block; }
+#wait_for_transmission.waiting .completed { display: none; }
+#wait_for_transmission.completed .waiting { display: none; }
+#wait_for_transmission.completed .completed { display: block; }
+
+body.supports-download-attr #wait_for_transmission a { display: block; }
+body.supports-download-attr #wait_for_transmission p.no-download-attr { display: none; }
+body.not-supports-download-attr #wait_for_transmission a { display: none; }
+body.not-supports-download-attr #wait_for_transmission p.no-download-attr { display: block; }
+
 </style>
     <body>
         <!--[if lt IE 7]>
@@ -489,25 +500,17 @@ html, body {
     </div>
 </div>
 
-<div id="receivep1" class="page buttons">
-	<h2 class="receive-title">Enter your secret key.</h2>
-	<h1 class="key">_ _</h1>
-</div>
-
-<div id="receivep2" class="page buttons">
-	<h2 class="receive-title">Enter your secret key.</h2>
-	<h1 class="key">? _</h1>
-</div>
-
-<div id="wait_for_transmission" class="page">
-	<button id="download"><svg height="96" width="96" version="1.1" xmlns="http://www.w3.org/2000/svg" style="overflow: hidden; position: relative;" >
+<div id="wait_for_transmission" class="page waiting">
+    <p class="waiting">Waiting for the photo...</p>
+	<a id="download" class="completed" href="#" download="image.jpg"><svg height="96" width="96" version="1.1" xmlns="http://www.w3.org/2000/svg" style="overflow: hidden; position: relative;" >
   <path
   	 class="button-icon-shadow"
      d="m51 8c-9.465 0-17.679 4.816-22.5 12.188-0.497-0.036-0.994-0.188-1.5-0.188-11.598 0-21 9.402-21 21 0 9.871 6.821 18.158 16 20.406v-10.968c-1.221-1.096-2-2.66-2-4.438 0-3.324 2.676-6 6-6h44c3.324 0 6 2.676 6 6 0 1.778-0.779 3.342-2 4.438v11.562h1c8.284 0 15-6.716 15-15 0-7.312-5.262-13.297-12.188-14.625-1.334-13.664-12.797-24.375-26.812-24.375zm-25 34c-1.108 0-2 0.892-2 2v44c0 1.108 0.892 2 2 2h44c1.108 0 2-0.892 2-2v-44c0-1.108-0.892-2-2-2h-44zm6 8h32v28h-32v-28zm11 6v9h-5l10 11 10-11h-5v-9h-10z" />
   <path
   	 class="button-icon-fill"
      d="m51 7c-9.465 0-17.679 4.816-22.5 12.188-0.497-0.036-0.994-0.188-1.5-0.188-11.598 0-21 9.402-21 21 0 9.871 6.821 18.158 16 20.406v-10.968c-1.221-1.096-2-2.66-2-4.438 0-3.324 2.676-6 6-6h44c3.324 0 6 2.676 6 6 0 1.778-0.779 3.342-2 4.438v11.562h1c8.284 0 15-6.716 15-15 0-7.312-5.262-13.297-12.188-14.625-1.334-13.664-12.797-24.375-26.812-24.375zm-25 34c-1.108 0-2 0.892-2 2v44c0 1.108 0.892 2 2 2h44c1.108 0 2-0.892 2-2v-44c0-1.108-0.892-2-2-2h-44zm6 8h32v28h-32v-28zm11 6v9h-5l10 11 10-11h-5v-9h-10z" />
-</svg><span class="button-text">Download Photo</span></button>
+</svg><span class="button-text">Download Photo</span></a>
+    <p class="no-download-attr completed">Now press and hold on the image and say "Save Image" to save it to your photos</p>
 	<div class="received-image"><img></div>
 </div>
 
@@ -517,50 +520,90 @@ html, body {
 
 <div id="sendp2" class="page">
 	<div class="page-content">
-		<p>Tell the recipient of your photo to visit Pubshare.com &amp; press "Receive a Photo"</p>
-		<p>Their secret key is: </p>
-		<p class="secret-key">"<span id="slot1">?</span> <span id="slot2">?</span>"</p>
+		<p>Tell the recipient of your photo to visit Pubshare.com &amp; press "Receive a Photo",
+		then enter their secret key: </p>
+		<p class="secret-key"></p>
 		<p id="send_status">waiting for them to start&hellip;</p>
 	</div>
 </div>
 
 <script>
 
-var CHARS = "0123456789ACFHNRUWXY".split(""),
-    rp1 = document.getElementById("receivep1"),
-    rp2 = document.getElementById("receivep2"),
-    rp1h2 = rp1.getElementsByTagName("h2")[0],
-    rp2h2 = rp2.getElementsByTagName("h2")[0],
-    rp2h3 = rp2.getElementsByTagName("h1")[0];
+document.body.classList.add("download" in document.createElement("a") ? "supports-download-attr" : "not-supports-download-attr");
+
+var CHARS = "0123456789ACFHNRUWXY".split("");
+
+//    rp1 = document.getElementById("receivep1"),
+//    rp2 = document.getElementById("receivep2"),
+//    rp1h2 = rp1.getElementsByTagName("h2")[0],
+//    rp2h2 = rp2.getElementsByTagName("h2")[0],
+//    rp2h3 = rp2.getElementsByTagName("h1")[0];
+
+var CODE_LENGTH = 4;
+
+var BUTTONS_PAGES = [];
+for (var codechar=0; codechar < CODE_LENGTH; codechar++) {
+    var rp = document.createElement("div");
+    rp.className = "page buttons";
+    var h2 = document.createElement("h2");
+    var h1 = document.createElement("h1");
+    h2.className = "receive-title";
+    h1.className = "key";
+    h2.appendChild(document.createTextNode("Enter your secret key."));
+    h1.appendChild(document.createTextNode(Array(CODE_LENGTH+1).join("_").split("").join(" ")));
+    rp.appendChild(h2);
+    rp.appendChild(h1);
+    rp.setAttribute("id", "receivep" + (codechar + 1));
+    document.body.appendChild(rp);
+    BUTTONS_PAGES.push(rp);
+}
+
 CHARS.forEach(function(c) {
-    var b1 = document.createElement("button"),
-        b2 = document.createElement("button");
-    b1.appendChild(document.createTextNode(c));
-    b2.appendChild(document.createTextNode(c));
-    rp1.insertBefore(b1, rp1h2);
-    rp2.insertBefore(b2, rp2h2);
-    b1.addEventListener("click", function(e) {
-        rp2.classList.add("active");
-        rp1.classList.remove("active");
-        rp2h3.innerHTML = c + " _";
-        b2.style.display = "none"; /* so it can't be pressed twice by accident */
-    }, false);
-    b2.addEventListener("click", function(e) {
-        slot = rp2h3.innerHTML.charAt(0) + c;
-        rp2h3.innerHTML = rp2h3.innerHTML.charAt(0) + " " + c;
-        document.getElementById("wait_for_transmission").classList.add("active");
-        rp2.classList.remove("active");
-        console.log("Sending request_from_slot to slot", slot);
-        socket.emit("request_from_slot", {slot:slot});
-        console.log("Now waiting for transmission");
-    });
+
+    var buttons = [];
+    for (var codechar=0; codechar < CODE_LENGTH; codechar++) {
+        var b = document.createElement("button");
+        b.appendChild(document.createTextNode(c));
+        BUTTONS_PAGES[codechar].appendChild(b);
+        buttons.push(b);
+        (function(index) {
+            b.addEventListener("click", function() {
+                if (index < (buttons.length-1)) {
+                    // this is an interim button. Update the printed key on each page
+                    BUTTONS_PAGES.forEach(function(page) {
+                        var key = page.querySelector("h1.key");
+                        key.innerHTML = key.innerHTML.replace("_", c);
+                    });
+                    // Hide all later buttons
+                    for (var hidebutton=index; hidebutton < buttons.length; hidebutton++) {
+                        buttons[hidebutton].style.display = "none";
+                    }
+                    // and move on to the next page
+                    BUTTONS_PAGES[index].classList.remove("active");
+                    BUTTONS_PAGES[index+1].classList.add("active");
+                } else {
+                    // this is the last button
+                    BUTTONS_PAGES.forEach(function(page) {
+                        var key = page.querySelector("h1.key");
+                        key.innerHTML = key.innerHTML.replace("_", c);
+                    });
+                    BUTTONS_PAGES[index].classList.remove("active");
+                    document.getElementById("wait_for_transmission").classList.add("active");
+                    var slot = BUTTONS_PAGES[index].querySelector("h1.key").innerHTML.replace(/ /g, "");
+                    console.log("Sending request_from_slot to slot", slot);
+                    socket.emit("request_from_slot", {slot:slot});
+                    console.log("Now waiting for transmission");
+                }
+            }, false);
+        })(codechar);
+    }
 });
 
 function serverErrorHandler(data) {
-    alert("got server error! " + data.text + " (" + data.code + ")");
+    alert("Something's gone wrong. " + data.text + " (" + data.code + ")");
 }
 function socketErrorHandler(data) {
-    alert("got socket error! " + JSON.stringify(data));
+    console.log("got socket error! " + JSON.stringify(data));
 }
 
 var socket = io.connect('/');
@@ -574,8 +617,7 @@ document.getElementById("send").addEventListener("click", function(e) {
 
     // set up socket
     socket.on('slot_answer', function (data) {
-        document.getElementById("slot1").firstChild.nodeValue = data.slot.charAt(0);
-        document.getElementById("slot2").firstChild.nodeValue = data.slot.charAt(1);
+        document.querySelector(".secret-key").innerHTML = '"' + data.slot.split("").join(" ") + '"';
         document.getElementById("sendp1").classList.remove("active");
         document.getElementById("sendp2").classList.add("active");
         console.log("got a slot answer", data, "and now waiting for transmit_now");
@@ -659,12 +701,12 @@ document.getElementById("receive").addEventListener("click", function(e) {
         document.querySelector(".received-image img").src = finaldata;
         dataurl = finaldata;
         socket.emit("got_all");
+        document.getElementById("download").href = dataurl;
+        var wft = document.getElementById("wait_for_transmission");
+        wft.classList.remove("waiting");
+        wft.classList.add("completed");
       }
     });
-}, false);
-
-document.getElementById("download").addEventListener("click", function(e) {
-    document.location.href = dataurl.replace("image/jpeg", "image/octet-stream");
 }, false);
 
 </script>

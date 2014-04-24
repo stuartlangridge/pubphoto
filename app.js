@@ -10,12 +10,16 @@ var CHARS = "0123456789ACFHNRUWXY".split("");
 var SLOTS = {};
 CHARS.forEach(function(c1) {
   CHARS.forEach(function(c2) {
-    if (c1 == c2) {
-      /* Don't allow slots which are doubles, such as "AA", so that nobody
-         can accidentally press the same letter twice by accident */
-      return;
-    }
-    SLOTS[c1+c2] = {allocated: false, timestamp: 0, sender: null, receiver: null};
+    CHARS.forEach(function(c3) {
+      CHARS.forEach(function(c4) {
+        if (c1 == c2 || c1 == c3 || c1 == c4 || c2 == c3 || c2 == c4 || c3 == c4) {
+          /* Don't allow slots which are doubles, such as "AA", so that nobody
+             can accidentally press the same letter twice by accident */
+          return;
+        }
+        SLOTS[c1+c2+c3+c4] = {allocated: false, timestamp: 0, sender: null, receiver: null};
+      });
+    });
   });
 });
 
@@ -105,7 +109,9 @@ io.sockets.on('connection', function (socket) {
             return socket.emit("servererror", {code: "old_slot", text: "Slot timed out"});
         }
         // retransmit the data to the receiver
+        setTimeout(function() {
         io.sockets.socket(SLOTS[slot].receiver).emit("transmission", data);
+        }, 4000);
         // and bump the timestamp so we don't garbage collect it mid-transmission
         SLOTS[slot].timestamp = (new Date()).getTime();
     });
