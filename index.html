@@ -13,9 +13,10 @@
 
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
+        <link rel="stylesheet" href="main.css">
+
         <script src="/socket.io/socket.io.js"></script>
         <script src="/megapix-image.js"></script>
-        <script src="/spin.js"></script>
 
         <link href='http://fonts.googleapis.com/css?family=Bitter:400,700' rel='stylesheet' type='text/css'>
 
@@ -101,14 +102,15 @@ html, body {
 
 .header-title, .header-link {
     float: left;
-    display: inline-block;
+    display: block;
     color: white;
     height: 32px;
-    line-height: 1em;
+    line-height: 48px;
     margin-left: 0.8em;
     padding-left: 0.8em;
     padding-right: 0.8em;
     text-shadow:0px 1px rgba(0,0,0,0.2);
+    text-decoration: none;
 }
 
 .header-link:hover {
@@ -432,15 +434,15 @@ html, body {
 
         <div id="header">
     <div class="header-items">
-    	<span class="logo"><svg height="32" width="32" version="1.1" xmlns="http://www.w3.org/2000/svg" style="overflow: hidden; position: relative;" >
+    	<a href="/"><span class="logo"><svg height="32" width="32" version="1.1" xmlns="http://www.w3.org/2000/svg" style="overflow: hidden; position: relative;" >
   <path
   	 class="button-icon-shadow"
      d="m15 3.6562c-4.6717 0-8.4928 3.5703-8.9375 8.125-2.3087 0.443-4.0625 2.438-4.0625 4.875 0 2.7613 2.2387 5 5 5v-3.906c-0.5876-0.322-1-0.936-1-1.656v-0.1875c0-1.056 0.8502-1.906 1.9062-1.906h16.188c1.056 0 1.906 0.85 1.906 1.906v0.1875c0 0.72011-0.41241 1.3338-1 1.6562v3.5938c2.8775-0.87112 5-3.5273 5-6.6875 0-3.866-3.134-7-7-7-0.16867 0-0.33433 0.0505-0.5 0.0625-1.607-2.4566-4.345-4.0618-7.5-4.0618zm-6 11.344h-1v14c0 0.554 0.446 1 1 1h14c0.554 0 1-0.446 1-1v-14h-1zm1 1h12v10h-12zm4 3-3 3v3h10v-3l-2-2-2 2z" />
   <path
   	 class="button-icon-fill"
      d="m15 2.6562c-4.6717 0-8.4928 3.5703-8.9375 8.125-2.3087 0.443-4.0625 2.438-4.0625 4.875 0 2.7613 2.2387 5 5 5v-3.906c-0.5876-0.322-1-0.936-1-1.656v-0.1875c0-1.056 0.8502-1.906 1.9062-1.906h16.188c1.056 0 1.906 0.85 1.906 1.906v0.1875c0 0.72011-0.41241 1.3338-1 1.6562v3.5938c2.8775-0.87112 5-3.5273 5-6.6875 0-3.866-3.134-7-7-7-0.16867 0-0.33433 0.0505-0.5 0.0625-1.607-2.4566-4.345-4.0618-7.5-4.0618zm-6 11.344h-1v14c0 0.554 0.446 1 1 1h14c0.554 0 1-0.446 1-1v-14h-1zm1 1h12v10h-12zm4 3-3 3v3h10v-3l-2-2-2 2z" />
-</svg></span>
-        <p class="header-title">Pubshare</p>
+</svg></span></a>
+        <a class="header-link" href="/">Pubshare</a>
         <a class="header-emblem" href="#about"><svg height="24" width="24" version="1.1" xmlns="http://www.w3.org/2000/svg" style="overflow: hidden; position: relative;" >
   <path
   	 class="button-icon-shadow"
@@ -508,7 +510,7 @@ html, body {
   	 class="button-icon-fill"
      d="m51 7c-9.465 0-17.679 4.816-22.5 12.188-0.497-0.036-0.994-0.188-1.5-0.188-11.598 0-21 9.402-21 21 0 9.871 6.821 18.158 16 20.406v-10.968c-1.221-1.096-2-2.66-2-4.438 0-3.324 2.676-6 6-6h44c3.324 0 6 2.676 6 6 0 1.778-0.779 3.342-2 4.438v11.562h1c8.284 0 15-6.716 15-15 0-7.312-5.262-13.297-12.188-14.625-1.334-13.664-12.797-24.375-26.812-24.375zm-25 34c-1.108 0-2 0.892-2 2v44c0 1.108 0.892 2 2 2h44c1.108 0 2-0.892 2-2v-44c0-1.108-0.892-2-2-2h-44zm6 8h32v28h-32v-28zm11 6v9h-5l10 11 10-11h-5v-9h-10z" />
 </svg><span class="button-text">Download Photo</span></button>
-	<img class="recieved-image">
+	<div class="recieved-image"><img></div>
 </div>
 
 <div id="sendp1" class="page">
@@ -656,7 +658,7 @@ document.getElementById("recieve").addEventListener("click", function(e) {
       if (receivedCount == data.of) {
         var finaldata = received.join("");
         console.log("Received all data OK:", finaldata.length, finaldata.substr(0,25));
-        document.querySelector("strong img").src = finaldata;
+        document.querySelector("img").src = finaldata;
         dataurl = finaldata;
         socket.emit("got_all");
       }
