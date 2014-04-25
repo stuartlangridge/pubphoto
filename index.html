@@ -567,7 +567,7 @@ body.not-supports-download-attr #wait_for_transmission.completed p.no-download-a
 
 <script>
 
-document.body.classList.add("downloadX" in document.createElement("a") ? "supports-download-attr" : "not-supports-download-attr");
+document.body.classList.add("download" in document.createElement("a") ? "supports-download-attr" : "not-supports-download-attr");
 
 var CHARS = "0123456789ACFHNRUWXY".split("");
 
