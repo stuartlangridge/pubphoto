@@ -177,7 +177,13 @@ html, body {
     font-weight: 400;
     padding: 0;
     line-height: 1em;
+    margin: 20px 0;
 }
+
+.secret-key small {
+    font-size: 1.2em;
+}
+
 
 .receive-title {
     font-family: "Bitter", sans-serif;
@@ -681,7 +687,7 @@ var ci = document.getElementById("cameraInput");
 ci.addEventListener("change", function(e) {
     now = (new Date()).getTime(); console.log("change fired at", now);
     if (e.target.files.length == 1 && e.target.files[0].type.indexOf("image/") == 0) {
-        document.querySelector(".secret-key").innerHTML = 'calculating&hellip;';
+        document.querySelector(".secret-key").innerHTML = '<small>calculating&hellip;</small>';
         document.getElementById("sendp1").classList.remove("active");
         document.getElementById("sendp2").classList.add("active");
     
