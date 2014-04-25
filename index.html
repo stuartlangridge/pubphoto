@@ -470,6 +470,30 @@ body.supports-download-attr #wait_for_transmission p.no-download-attr { display:
 body.not-supports-download-attr #wait_for_transmission a#download { display: none; }
 body.not-supports-download-attr #wait_for_transmission.completed p.no-download-attr { display: block; }
 
+#sendp2 p {
+    -webkit-transition: all 600ms ease;
+    -moz-transition: all 600ms ease;
+    -ms-transition: all 600ms ease;
+    transition: all 600ms ease;
+}
+#sendp2.sending .sending {
+    height: auto;
+}
+#sendp2.sending .received:not(.sending) {
+    opacity: 0;
+}
+#sendp2.end-sending .sending:not(.received) {
+    height: 1px !important;
+    margin: 1px;
+    overflow: hidden;
+}
+#sendp2.end-sending .received {
+    opacity: 1;
+}
+#sendp2.received .sending:not(.received) {
+    display: none;
+}
+
 </style>
     <body>
         <!--[if lt IE 7]>
@@ -553,12 +577,13 @@ body.not-supports-download-attr #wait_for_transmission.completed p.no-download-a
 	<input class="custom-file-input" type="file" xcapture="camera" xcapture accept="image/*" id="cameraInput">
 </div>
 
-<div id="sendp2" class="page">
+<div id="sendp2" class="page sending">
 	<div class="page-content">
-		<p>Tell the recipient of your photo to visit Pubshare.com &amp; press "Receive a Photo",
+		<p class="sending">Tell the recipient of your photo to visit Pubshare.com &amp; press "Receive a Photo",
 		then enter their secret key: </p>
-		<p class="secret-key"></p>
-		<p id="send_status">waiting for them to start&hellip;</p>
+		<p class="secret-key sending">x</p>
+		<p id="send_status" class="sending received">waiting for them to start&hellip;</p>
+		<p class="received"><a href="/">Send another photo</a></p>
 	</div>
 </div>
 
@@ -576,12 +601,6 @@ body.not-supports-download-attr #wait_for_transmission.completed p.no-download-a
 document.body.classList.add("download" in document.createElement("a") ? "supports-download-attr" : "not-supports-download-attr");
 
 var CHARS = "0123456789ACFHNRUWXY".split("");
-
-//    rp1 = document.getElementById("receivep1"),
-//    rp2 = document.getElementById("receivep2"),
-//    rp1h2 = rp1.getElementsByTagName("h2")[0],
-//    rp2h2 = rp2.getElementsByTagName("h2")[0],
-//    rp2h3 = rp2.getElementsByTagName("h1")[0];
 
 var CODE_LENGTH = 4;
 
@@ -611,7 +630,8 @@ CHARS.forEach(function(c) {
         BUTTONS_PAGES[codechar].appendChild(b);
         buttons.push(b);
         (function(index) {
-            b.addEventListener("click", function() {
+            function clickhdl(e) {
+                e.preventDefault();
                 if (index < (buttons.length-1)) {
                     // this is an interim button. Update the printed key on each page
                     BUTTONS_PAGES.forEach(function(page) {
@@ -638,7 +658,9 @@ CHARS.forEach(function(c) {
                     socket.emit("request_from_slot", {slot:slot});
                     console.log("Now waiting for transmission");
                 }
-            }, false);
+            }
+            b.addEventListener("click", clickhdl, false);
+            b.addEventListener("touchstart", clickhdl, false);
         })(codechar);
     }
 });
@@ -656,7 +678,8 @@ var socket = io.connect('/');
 socket.on("servererror", serverErrorHandler);
 socket.on("error", socketErrorHandler);
 
-document.getElementById("send").addEventListener("click", function(e) {
+function sendhdl(e) {
+    e.preventDefault();
     // show send screen
     document.getElementById("front").classList.remove("active");
     document.getElementById("sendp1").classList.add("active");
@@ -668,7 +691,18 @@ document.getElementById("send").addEventListener("click", function(e) {
         console.log("got a slot answer", data, "and now waiting for transmit_now");
         socket.on('transmit_now', function () {
             socket.on('got_all', function () {
-                document.getElementById("send_status").firstChild.nodeValue = "Received!";
+                document.getElementById("send_status").firstChild.nodeValue = "Received OK!";
+                var sendp2 = document.getElementById("sendp2");
+                // set explicit heights so that the transition works
+                [].slice.call(sendp2.querySelectorAll("p")).forEach(function(p) {
+                    p.style.height = p.offsetHeight + "px";
+                });
+                sendp2.classList.remove("sending");
+                sendp2.classList.add("end-sending");
+                setTimeout(function() {
+                    sendp2.classList.remove("end-sending");
+                    sendp2.classList.add("received");
+                }, 600);
             });
             document.getElementById("send_status").firstChild.nodeValue = "Sending...";
             console.log("got transmit_now; now transmitting data url");
@@ -678,7 +712,9 @@ document.getElementById("send").addEventListener("click", function(e) {
             }
         });
     });
-}, false);
+}
+document.getElementById("send").addEventListener("click", sendhdl, false);
+document.getElementById("send").addEventListener("touchstart", sendhdl, false);
 
 if(!("url" in window) && ("webkitURL" in window)) { window.URL = window.webkitURL; }
 
@@ -734,7 +770,8 @@ ci.addEventListener("change", function(e) {
     }
 }, false);
 
-document.getElementById("receive").addEventListener("click", function(e) {
+function receivehdl(e) {
+    e.preventDefault();
     // Show receive first screen
     document.getElementById("front").classList.remove("active");
     document.getElementById("receivep1").classList.add("active");
@@ -757,7 +794,9 @@ document.getElementById("receive").addEventListener("click", function(e) {
         wft.classList.add("completed");
       }
     });
-}, false);
+}
+document.getElementById("receive").addEventListener("click", receivehdl, false);
+document.getElementById("receive").addEventListener("touchstart", receivehdl, false);
 
 </script>
 
