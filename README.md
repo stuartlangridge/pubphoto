@@ -1,6 +1,8 @@
 pubphoto
 ========
 
+See it for real at soonsnap.com. 
+
 A simple way to exchange just-taken photos in the pub with people you don't know.
 
 Here's the use case. You're there in the pub, Friday night, and there's a group of people squeezing themselves together behind a table while one of their number takes a photo of them. So you step up, helpful, and say "hey, let me take that, then you can be in it!" and whip your phone from your pocket and snap a picture of them all pulling faces and drinking cocktails.
