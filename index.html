@@ -494,6 +494,16 @@ body.not-supports-download-attr #wait_for_transmission.completed p.no-download-a
     display: none;
 }
 
+.buttons button.backspace {
+    left: auto;
+    right: 4%;
+    top: 96px;
+    height: 60px;
+    text-align: center;
+    padding: 0;
+    background-color: #E63D4E;
+}
+
 </style>
     <body>
         <!--[if lt IE 7]>
@@ -621,7 +631,6 @@ for (var codechar=0; codechar < CODE_LENGTH; codechar++) {
     BUTTONS_PAGES.push(rp);
 }
 
-var firstchar = true;
 CHARS.forEach(function(c) {
     var buttons = [];
     for (var codechar=0; codechar < CODE_LENGTH; codechar++) {
@@ -641,6 +650,7 @@ CHARS.forEach(function(c) {
                     // Hide all later buttons
                     for (var hidebutton=index; hidebutton < buttons.length; hidebutton++) {
                         buttons[hidebutton].style.display = "none";
+                        buttons[hidebutton].classList.add("hidden");
                     }
                     // and move on to the next page
                     BUTTONS_PAGES[index].classList.remove("active");
@@ -662,19 +672,36 @@ CHARS.forEach(function(c) {
             b.addEventListener("click", clickhdl, false);
             b.addEventListener("touchstart", clickhdl, false);
         })(codechar);
-        // backspace button
-        if (firstchar) {
-            if (codechar < CODE_LENGTH - 1) {
-                console.log("creating backspace button");
-                var backspace = document.createElement("button");
-                backspace.appendChild(document.createTextNode("\232B"));
-                backspace.className = "backspace";
-                BUTTONS_PAGES[codechar].appendChild(backspace);
-            }
-        }
     }
-    firstchar = false;
 });
+
+for (var codechar=0; codechar < CODE_LENGTH; codechar++) {
+    // backspace button
+    if (codechar > 0) {
+        console.log("creating backspace button");
+        var backspace = document.createElement("button");
+        backspace.innerHTML = "&times;";
+        backspace.className = "backspace";
+        BUTTONS_PAGES[codechar].appendChild(backspace);
+        
+        function bshdl(e) {
+            e.preventDefault();
+            Array.prototype.slice.call(document.querySelectorAll("h1.key")).forEach(function(key) {
+                key.firstChild.nodeValue = Array(CODE_LENGTH+1).join("_").split("").join(" ");
+            });
+            document.querySelector(".page.active").classList.remove("active");
+            Array.prototype.slice.call(document.querySelectorAll("button.hidden")).forEach(function(hb) {
+                hb.style.display = "block";
+                hb.classList.remove("hidden");
+            });
+            BUTTONS_PAGES[0].classList.add("active");
+        }
+        
+        backspace.addEventListener("click", bshdl, false);
+        backspace.addEventListener("touchstart", bshdl, false);
+    }
+}
+
 
 function serverErrorHandler(data) {
     document.getElementById("error-message").innerHTML = data.text;
