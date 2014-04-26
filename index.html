@@ -621,8 +621,8 @@ for (var codechar=0; codechar < CODE_LENGTH; codechar++) {
     BUTTONS_PAGES.push(rp);
 }
 
+var firstchar = true;
 CHARS.forEach(function(c) {
-
     var buttons = [];
     for (var codechar=0; codechar < CODE_LENGTH; codechar++) {
         var b = document.createElement("button");
@@ -662,7 +662,18 @@ CHARS.forEach(function(c) {
             b.addEventListener("click", clickhdl, false);
             b.addEventListener("touchstart", clickhdl, false);
         })(codechar);
+        // backspace button
+        if (firstchar) {
+            if (codechar < CODE_LENGTH - 1) {
+                console.log("creating backspace button");
+                var backspace = document.createElement("button");
+                backspace.appendChild(document.createTextNode("\232B"));
+                backspace.className = "backspace";
+                BUTTONS_PAGES[codechar].appendChild(backspace);
+            }
+        }
     }
+    firstchar = false;
 });
 
 function serverErrorHandler(data) {
