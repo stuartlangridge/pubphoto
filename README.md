@@ -20,7 +20,9 @@ Here are the constraints:
 And here's the idea:
 
  1. You hit this website and it tells you to pick a photo
- 2. It gives you a simple two-letter code and gives you instructions to read out to them: go to this website, enter letter 1, enter letter 2
+ 2. It gives you a simple four-letter code and gives you instructions to read out to them: go to this website, enter the four letters of the code
  3. They do it: it gives them the photo
  4. You say "there you go", they say "thank you!", and another little human interaction is improved with technology without getting in the way
+
+Concept and written by Stuart "@sil" Langridge; visual design by Sam "@snwh" Hewitt
 
