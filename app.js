@@ -4,6 +4,7 @@ var app = require('express')()
 
 var port = process.env.PORT || 3006;
 server.listen(port);
+console.log("Running on port", port);
 
 var CHARS = "0123456789ACFHNRUWXY".split("");
 
