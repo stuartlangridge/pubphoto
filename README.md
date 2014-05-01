@@ -1,4 +1,4 @@
-pubphoto
+Soonsnap
 ========
 
 See it for real at soonsnap.com. 
