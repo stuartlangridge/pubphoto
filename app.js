@@ -1,6 +1,7 @@
 var app = require('express')()
   , server = require('http').createServer(app)
-  , io = require('socket.io').listen(server);
+  , io = require('socket.io').listen(server)
+  , fs = require('fs');
 
 var port = process.env.PORT || 3006;
 server.listen(port);
@@ -29,6 +30,14 @@ app.get('/', function (req, res) {
 });
 app.get('/megapix-image.js', function (req, res) {
   res.sendfile(__dirname + '/megapix-image.js');
+});
+app.get(/^\/icon-(\d+).png$/, function (req, res) {
+  var fn = __dirname + '/icon-' + req.params[0] + '.png';
+  if (fs.existsSync(fn)) {
+    res.sendfile(fn);
+  } else {
+    res.status(404).send('Not found');
+  }
 });
 
 function shuffle(array) {

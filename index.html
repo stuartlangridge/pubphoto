@@ -10,14 +10,13 @@
         <title>soonsnap :: share just-taken photos with people standing next to you</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, user-scalable=no, minimal-ui">
-
-        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-
-        <script src="/socket.io/socket.io.js"></script>
-        <script src="/megapix-image.js"></script>
-
+        <link rel="icon" type="image/png" href="/icon-32.png">
         <link href='http://fonts.googleapis.com/css?family=Bitter:400,700' rel='stylesheet' type='text/css'>
 
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="icon-144.png">
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="icon-114.png">
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="icon-72.png">
+        <link rel="apple-touch-icon-precomposed" href="icon-57.png">
     </head>
     <style type="text/css">
 
@@ -606,6 +605,8 @@ body.not-supports-download-attr #wait_for_transmission.completed p.no-download-a
 </div>
 
 
+<script src="/socket.io/socket.io.js"></script>
+<script src="/megapix-image.js"></script>
 <script>
 
 document.body.classList.add("download" in document.createElement("a") ? "supports-download-attr" : "not-supports-download-attr");
@@ -837,3 +838,14 @@ document.getElementById("receive").addEventListener("click", receivehdl, false);
 document.getElementById("receive").addEventListener("touchstart", receivehdl, false);
 
 </script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-50715485-1', 'soonsnap.com');
+  ga('send', 'pageview');
+
+</script>
+
