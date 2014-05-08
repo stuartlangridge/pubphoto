@@ -3,22 +3,22 @@
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <!-- Use title if it's in the page YAML frontmatter -->
-        <title>soonsnap :: share just-taken photos with people standing next to you</title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, user-scalable=no, minimal-ui">
-        <link rel="icon" type="image/png" href="/icon-32.png">
-        <link href='http://fonts.googleapis.com/css?family=Bitter:400,700' rel='stylesheet' type='text/css'>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <!-- Use title if it's in the page YAML frontmatter -->
+    <title>soonsnap :: share just-taken photos with people standing next to you</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimal-ui">
+    <link rel="icon" type="image/png" href="/icon-16.png">
+    <link href='http://fonts.googleapis.com/css?family=Bitter:400,700' rel='stylesheet' type='text/css'>
 
-        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="icon-144.png">
-        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="icon-114.png">
-        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="icon-72.png">
-        <link rel="apple-touch-icon-precomposed" href="icon-57.png">
-    </head>
-    <style type="text/css">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="icon-144.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="icon-114.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="icon-72.png">
+    <link rel="apple-touch-icon-precomposed" href="icon-57.png">
+</head>
+<style type="text/css">
 
 html,
 button,
@@ -296,12 +296,34 @@ html, body {
     background: #F58735;
 }
 
+#send_another {
+    position: absolute;
+    margin: auto 5%;
+    width: 90%;
+    -webkit-border-radius:4px;
+    -moz-border-radius:4px;
+    border-radius:4px;
+    box-shadow:inset 0 -4px 0 0 rgba(0,0,0,0.2);
+    outline: none;
+    border: none;
+    padding-top: 10px;
+    padding-bottom: 14px;
+    background: #E63D4E;
+}
+
+#send_another:active {
+    box-shadow:inset 0 4px 0 0 rgba(0,0,0,0.2);
+    padding-top: 14px;
+    padding-bottom: 10px;
+}
+
 #wait_for_transmission #download {
     background: #0F9D58;
     top: 0;
     height: 30%;
     margin-top: 70px;
 }
+
 #wait_for_transmission #download .button-text {
     position: absolute;
     top: 110px;
@@ -503,64 +525,136 @@ body.not-supports-download-attr #wait_for_transmission.completed p.no-download-a
     background-color: #E63D4E;
 }
 
-</style>
-    <body>
-        <!--[if lt IE 7]>
-            <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
-        <![endif]-->
+#loader {
+    text-align: center;    
+}
 
-        <div id="header">
+.invisible {
+    display: none;
+}
+
+#loader span {
+    display: inline-block;
+    vertical-align: middle;
+    width: 10px;
+    height: 10px;
+    margin: 50px auto;
+    background: #333;
+    border-radius: 50px;
+    -webkit-animation: loader 0.9s infinite alternate;
+    -moz-animation: loader 0.9s infinite alternate;
+}
+#loader span:nth-of-type(2) {
+    -webkit-animation-delay: 0.3s;
+    -moz-animation-delay: 0.3s;
+}
+#loader span:nth-of-type(3) {
+    -webkit-animation-delay: 0.6s;
+    -moz-animation-delay: 0.6s;
+}
+@-webkit-keyframes loader {
+  0% {
+    width: 10px;
+    height: 10px;
+    opacity: 0.9;
+    -webkit-transform: translateY(0);
+  }
+  100% {
+    width: 24px;
+    height: 24px;
+    opacity: 0.1;
+    -webkit-transform: translateY(-21px);
+  }
+}
+@-moz-keyframes loader {
+  0% {
+    width: 10px;
+    height: 10px;
+    opacity: 0.9;
+    -moz-transform: translateY(0);
+  }
+  100% {
+    width: 24px;
+    height: 24px;
+    opacity: 0.1;
+    -moz-transform: translateY(-21px);
+  }
+}
+
+</style>
+<body>
+<!--[if lt IE 7]>
+    <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
+<![endif]-->
+
+
+<!-- Header -->
+<div id="header">
     <div class="header-items">
-    	<a href="/"><span class="logo"><svg height="32" width="32" version="1.1" xmlns="http://www.w3.org/2000/svg" style="overflow: hidden; position: relative;" >
-  <path
-  	 class="button-icon-shadow"
-     d="m15 3.6562c-4.6717 0-8.4928 3.5703-8.9375 8.125-2.3087 0.443-4.0625 2.438-4.0625 4.875 0 2.7613 2.2387 5 5 5v-3.906c-0.5876-0.322-1-0.936-1-1.656v-0.1875c0-1.056 0.8502-1.906 1.9062-1.906h16.188c1.056 0 1.906 0.85 1.906 1.906v0.1875c0 0.72011-0.41241 1.3338-1 1.6562v3.5938c2.8775-0.87112 5-3.5273 5-6.6875 0-3.866-3.134-7-7-7-0.16867 0-0.33433 0.0505-0.5 0.0625-1.607-2.4566-4.345-4.0618-7.5-4.0618zm-6 11.344h-1v14c0 0.554 0.446 1 1 1h14c0.554 0 1-0.446 1-1v-14h-1zm1 1h12v10h-12zm4 3-3 3v3h10v-3l-2-2-2 2z" />
-  <path
-  	 class="button-icon-fill"
-     d="m15 2.6562c-4.6717 0-8.4928 3.5703-8.9375 8.125-2.3087 0.443-4.0625 2.438-4.0625 4.875 0 2.7613 2.2387 5 5 5v-3.906c-0.5876-0.322-1-0.936-1-1.656v-0.1875c0-1.056 0.8502-1.906 1.9062-1.906h16.188c1.056 0 1.906 0.85 1.906 1.906v0.1875c0 0.72011-0.41241 1.3338-1 1.6562v3.5938c2.8775-0.87112 5-3.5273 5-6.6875 0-3.866-3.134-7-7-7-0.16867 0-0.33433 0.0505-0.5 0.0625-1.607-2.4566-4.345-4.0618-7.5-4.0618zm-6 11.344h-1v14c0 0.554 0.446 1 1 1h14c0.554 0 1-0.446 1-1v-14h-1zm1 1h12v10h-12zm4 3-3 3v3h10v-3l-2-2-2 2z" />
-</svg></span></a>
+    	<a href="/"><span class="logo">
+            <svg height="32" width="32" version="1.1" xmlns="http://www.w3.org/2000/svg" style="overflow: hidden; position: relative;" >
+              <path
+              	 class="button-icon-shadow"
+                 d="m15 3.6562c-4.6717 0-8.4928 3.5703-8.9375 8.125-2.3087 0.443-4.0625 2.438-4.0625 4.875 0 2.7613 2.2387 5 5 5v-3.906c-0.5876-0.322-1-0.936-1-1.656v-0.1875c0-1.056 0.8502-1.906 1.9062-1.906h16.188c1.056 0 1.906 0.85 1.906 1.906v0.1875c0 0.72011-0.41241 1.3338-1 1.6562v3.5938c2.8775-0.87112 5-3.5273 5-6.6875 0-3.866-3.134-7-7-7-0.16867 0-0.33433 0.0505-0.5 0.0625-1.607-2.4566-4.345-4.0618-7.5-4.0618zm-6 11.344h-1v14c0 0.554 0.446 1 1 1h14c0.554 0 1-0.446 1-1v-14h-1zm1 1h12v10h-12zm4 3-3 3v3h10v-3l-2-2-2 2z" />
+              <path
+              	 class="button-icon-fill"
+                 d="m15 2.6562c-4.6717 0-8.4928 3.5703-8.9375 8.125-2.3087 0.443-4.0625 2.438-4.0625 4.875 0 2.7613 2.2387 5 5 5v-3.906c-0.5876-0.322-1-0.936-1-1.656v-0.1875c0-1.056 0.8502-1.906 1.9062-1.906h16.188c1.056 0 1.906 0.85 1.906 1.906v0.1875c0 0.72011-0.41241 1.3338-1 1.6562v3.5938c2.8775-0.87112 5-3.5273 5-6.6875 0-3.866-3.134-7-7-7-0.16867 0-0.33433 0.0505-0.5 0.0625-1.607-2.4566-4.345-4.0618-7.5-4.0618zm-6 11.344h-1v14c0 0.554 0.446 1 1 1h14c0.554 0 1-0.446 1-1v-14h-1zm1 1h12v10h-12zm4 3-3 3v3h10v-3l-2-2-2 2z" />
+            </svg>
+        </span></a>
         <a class="header-link" href="/">soonsnap</a>
-        <a class="header-emblem" href="#about"><svg height="24" width="24" version="1.1" xmlns="http://www.w3.org/2000/svg" style="overflow: hidden; position: relative;" >
-  <path
-  	 class="button-icon-shadow"
-     d="m 11.63,3.01 c 3.2833,-0.18391 6.1881,2.339 6.372,5.6223 -2e-4,2.8014 -0.75506,3.8417 -3.186,5.6848 -0.38168,0.28715 -0.65089,0.50097 -0.74965,0.62471 -0.0987,0.12414 -0.0624,0.0666 -0.0624,0.0624 0.014,1.0561 -0.94281,1.999 -1.999,1.999 -1.05619,0 -2.013,-0.94293 -1.9991,-1.999 0,-1.0043 0.44827,-1.886 0.93706,-2.4988 0.48879,-0.61297 0.98214,-1.0323 1.4368,-1.3744 0.40791,-0.32097 0.92123,-0.76872 1.3744,-1.3119 0.18691,-0.22409 0.25788,-0.61503 0.24988,-0.87459 v -0.0624 c -0.0632,-1.1259 -0.99805,-1.9373 -2.124,-1.8741 -1.12595,0.0632 -1.9373,0.87311 -1.8741,1.999 0,1.9991 -1.999,1.9991 -1.999,1.9991 0,0 -1.9991,0 -1.9991,-1.9991 -0.18391,-3.2833 2.339,-5.813 5.6223,-5.9972 z m 0.37483,15.992 c 1.104,0 1.999,0.89502 1.999,1.999 0,1.10398 -0.89501,1.9991 -1.999,1.9991 -1.10399,0 -1.9991,-0.89502 -1.9991,-1.9991 0,-1.104 0.89502,-1.999 1.9991,-1.999 z" />
-  <path
-  	 class="button-icon-fill"
-     d="m 11.63,2.01 c 3.2833,-0.18391 6.1881,2.339 6.372,5.6223 -2e-4,2.8014 -0.75506,3.8417 -3.186,5.6848 -0.38168,0.28715 -0.65089,0.50097 -0.74965,0.62471 -0.0987,0.12414 -0.0624,0.0666 -0.0624,0.0624 0.014,1.0561 -0.94281,1.999 -1.999,1.999 -1.05619,0 -2.013,-0.94293 -1.9991,-1.999 0,-1.0043 0.44827,-1.886 0.93706,-2.4988 0.48879,-0.61297 0.98214,-1.0323 1.4368,-1.3744 0.40791,-0.32097 0.92123,-0.76872 1.3744,-1.3119 0.18691,-0.22409 0.25788,-0.61503 0.24988,-0.87459 v -0.0624 c -0.0632,-1.1259 -0.99805,-1.9373 -2.124,-1.8741 -1.12595,0.0632 -1.9373,0.87311 -1.8741,1.999 0,1.9991 -1.999,1.9991 -1.999,1.9991 0,0 -1.9991,0 -1.9991,-1.9991 -0.18391,-3.2833 2.339,-5.813 5.6223,-5.9972 z m 0.37483,15.992 c 1.104,0 1.999,0.89502 1.999,1.999 0,1.10398 -0.89501,1.9991 -1.999,1.9991 -1.10399,0 -1.9991,-0.89502 -1.9991,-1.9991 0,-1.104 0.89502,-1.999 1.9991,-1.999 z" />
-</svg></a>
+        <a class="header-emblem" href="#about">
+            <svg height="24" width="24" version="1.1" xmlns="http://www.w3.org/2000/svg" style="overflow: hidden; position: relative;" >
+              <path
+              	 class="button-icon-shadow"
+                 d="m 11.63,3.01 c 3.2833,-0.18391 6.1881,2.339 6.372,5.6223 -2e-4,2.8014 -0.75506,3.8417 -3.186,5.6848 -0.38168,0.28715 -0.65089,0.50097 -0.74965,0.62471 -0.0987,0.12414 -0.0624,0.0666 -0.0624,0.0624 0.014,1.0561 -0.94281,1.999 -1.999,1.999 -1.05619,0 -2.013,-0.94293 -1.9991,-1.999 0,-1.0043 0.44827,-1.886 0.93706,-2.4988 0.48879,-0.61297 0.98214,-1.0323 1.4368,-1.3744 0.40791,-0.32097 0.92123,-0.76872 1.3744,-1.3119 0.18691,-0.22409 0.25788,-0.61503 0.24988,-0.87459 v -0.0624 c -0.0632,-1.1259 -0.99805,-1.9373 -2.124,-1.8741 -1.12595,0.0632 -1.9373,0.87311 -1.8741,1.999 0,1.9991 -1.999,1.9991 -1.999,1.9991 0,0 -1.9991,0 -1.9991,-1.9991 -0.18391,-3.2833 2.339,-5.813 5.6223,-5.9972 z m 0.37483,15.992 c 1.104,0 1.999,0.89502 1.999,1.999 0,1.10398 -0.89501,1.9991 -1.999,1.9991 -1.10399,0 -1.9991,-0.89502 -1.9991,-1.9991 0,-1.104 0.89502,-1.999 1.9991,-1.999 z" />
+              <path
+              	 class="button-icon-fill"
+                 d="m 11.63,2.01 c 3.2833,-0.18391 6.1881,2.339 6.372,5.6223 -2e-4,2.8014 -0.75506,3.8417 -3.186,5.6848 -0.38168,0.28715 -0.65089,0.50097 -0.74965,0.62471 -0.0987,0.12414 -0.0624,0.0666 -0.0624,0.0624 0.014,1.0561 -0.94281,1.999 -1.999,1.999 -1.05619,0 -2.013,-0.94293 -1.9991,-1.999 0,-1.0043 0.44827,-1.886 0.93706,-2.4988 0.48879,-0.61297 0.98214,-1.0323 1.4368,-1.3744 0.40791,-0.32097 0.92123,-0.76872 1.3744,-1.3119 0.18691,-0.22409 0.25788,-0.61503 0.24988,-0.87459 v -0.0624 c -0.0632,-1.1259 -0.99805,-1.9373 -2.124,-1.8741 -1.12595,0.0632 -1.9373,0.87311 -1.8741,1.999 0,1.9991 -1.999,1.9991 -1.999,1.9991 0,0 -1.9991,0 -1.9991,-1.9991 -0.18391,-3.2833 2.339,-5.813 5.6223,-5.9972 z m 0.37483,15.992 c 1.104,0 1.999,0.89502 1.999,1.999 0,1.10398 -0.89501,1.9991 -1.999,1.9991 -1.10399,0 -1.9991,-0.89502 -1.9991,-1.9991 0,-1.104 0.89502,-1.999 1.9991,-1.999 z" />
+            </svg>
+        </a>
     </div>
 </div>
 
+<!-- Front -->
 <div id="front" class="page active">
-	<button id="receive"><svg height="96" width="96" version="1.1" xmlns="http://www.w3.org/2000/svg" style="overflow: hidden; position: relative;" >
-  <path
-  	 class="button-icon-shadow"
-     d="m51 8c-9.465 0-17.679 4.816-22.5 12.188-0.497-0.036-0.994-0.188-1.5-0.188-11.598 0-21 9.402-21 21 0 9.871 6.821 18.158 16 20.406v-10.968c-1.221-1.096-2-2.66-2-4.438 0-3.324 2.676-6 6-6h44c3.324 0 6 2.676 6 6 0 1.778-0.779 3.342-2 4.438v11.562h1c8.284 0 15-6.716 15-15 0-7.312-5.262-13.297-12.188-14.625-1.334-13.664-12.797-24.375-26.812-24.375zm-25 34c-1.108 0-2 0.892-2 2v44c0 1.108 0.892 2 2 2h44c1.108 0 2-0.892 2-2v-44c0-1.108-0.892-2-2-2h-44zm6 8h32v28h-32v-28zm11 6v9h-5l10 11 10-11h-5v-9h-10z" />
-  <path
-  	 class="button-icon-fill"
-     d="m51 7c-9.465 0-17.679 4.816-22.5 12.188-0.497-0.036-0.994-0.188-1.5-0.188-11.598 0-21 9.402-21 21 0 9.871 6.821 18.158 16 20.406v-10.968c-1.221-1.096-2-2.66-2-4.438 0-3.324 2.676-6 6-6h44c3.324 0 6 2.676 6 6 0 1.778-0.779 3.342-2 4.438v11.562h1c8.284 0 15-6.716 15-15 0-7.312-5.262-13.297-12.188-14.625-1.334-13.664-12.797-24.375-26.812-24.375zm-25 34c-1.108 0-2 0.892-2 2v44c0 1.108 0.892 2 2 2h44c1.108 0 2-0.892 2-2v-44c0-1.108-0.892-2-2-2h-44zm6 8h32v28h-32v-28zm11 6v9h-5l10 11 10-11h-5v-9h-10z" />
-</svg><span class="button-text">Receive a Photo</span></button>
-	<button id="send"><svg height="96" width="96" version="1.1" xmlns="http://www.w3.org/2000/svg" style="overflow: hidden; position: relative;" >
-  <path
-  	 class="button-icon-shadow"
-     d="m45 8c-14.015 0-25.478 10.711-26.812 24.375-6.926 1.328-12.188 7.313-12.188 14.625 0 8.284 6.716 15 15 15h1v-11.562c-1.221-1.096-2-2.66-2-4.438 0-3.324 2.676-6 6-6h44c3.324 0 6 2.676 6 6 0 1.778-0.779 3.342-2 4.438v10.968c9.179-2.248 16-10.535 16-20.406 0-11.598-9.402-21-21-21-0.506 0-1.003 0.152-1.5 0.188-4.821-7.372-13.035-12.188-22.5-12.188zm-19 34c-1.108 0-2 0.892-2 2v44c0 1.108 0.892 2 2 2h44c1.108 0 2-0.892 2-2v-44c0-1.108-0.892-2-2-2h-44zm6 8h32v28h-32v-28zm16 4l-10 11h5v9h10v-9h5l-10-11z" />
-  <path
-  	 class="button-icon-fill"
-     d="m45 7c-14.015 0-25.478 10.711-26.812 24.375-6.926 1.328-12.188 7.313-12.188 14.625 0 8.284 6.716 15 15 15h1v-11.562c-1.221-1.096-2-2.66-2-4.438 0-3.324 2.676-6 6-6h44c3.324 0 6 2.676 6 6 0 1.778-0.779 3.342-2 4.438v10.968c9.179-2.248 16-10.535 16-20.406 0-11.598-9.402-21-21-21-0.506 0-1.003 0.152-1.5 0.188-4.821-7.372-13.035-12.188-22.5-12.188zm-19 34c-1.108 0-2 0.892-2 2v44c0 1.108 0.892 2 2 2h44c1.108 0 2-0.892 2-2v-44c0-1.108-0.892-2-2-2h-44zm6 8h32v28h-32v-28zm16 4l-10 11h5v9h10v-9h5l-10-11z" />
-</svg><span class="button-text">Send a Photo</span></button>
+    <!-- Receive Button -->
+	<button id="receive">
+    <svg height="96" width="96" version="1.1" xmlns="http://www.w3.org/2000/svg" style="overflow: hidden; position: relative;" >
+      <path
+      	 class="button-icon-shadow"
+         d="m51 8c-9.465 0-17.679 4.816-22.5 12.188-0.497-0.036-0.994-0.188-1.5-0.188-11.598 0-21 9.402-21 21 0 9.871 6.821 18.158 16 20.406v-10.968c-1.221-1.096-2-2.66-2-4.438 0-3.324 2.676-6 6-6h44c3.324 0 6 2.676 6 6 0 1.778-0.779 3.342-2 4.438v11.562h1c8.284 0 15-6.716 15-15 0-7.312-5.262-13.297-12.188-14.625-1.334-13.664-12.797-24.375-26.812-24.375zm-25 34c-1.108 0-2 0.892-2 2v44c0 1.108 0.892 2 2 2h44c1.108 0 2-0.892 2-2v-44c0-1.108-0.892-2-2-2h-44zm6 8h32v28h-32v-28zm11 6v9h-5l10 11 10-11h-5v-9h-10z" />
+      <path
+      	 class="button-icon-fill"
+         d="m51 7c-9.465 0-17.679 4.816-22.5 12.188-0.497-0.036-0.994-0.188-1.5-0.188-11.598 0-21 9.402-21 21 0 9.871 6.821 18.158 16 20.406v-10.968c-1.221-1.096-2-2.66-2-4.438 0-3.324 2.676-6 6-6h44c3.324 0 6 2.676 6 6 0 1.778-0.779 3.342-2 4.438v11.562h1c8.284 0 15-6.716 15-15 0-7.312-5.262-13.297-12.188-14.625-1.334-13.664-12.797-24.375-26.812-24.375zm-25 34c-1.108 0-2 0.892-2 2v44c0 1.108 0.892 2 2 2h44c1.108 0 2-0.892 2-2v-44c0-1.108-0.892-2-2-2h-44zm6 8h32v28h-32v-28zm11 6v9h-5l10 11 10-11h-5v-9h-10z" />
+    </svg>
+    <span class="button-text">Receive a Photo</span>
+    </button>
+    <!-- Send Button -->
+	<button id="send">
+    <svg height="96" width="96" version="1.1" xmlns="http://www.w3.org/2000/svg" style="overflow: hidden; position: relative;" >
+      <path
+      	 class="button-icon-shadow"
+         d="m45 8c-14.015 0-25.478 10.711-26.812 24.375-6.926 1.328-12.188 7.313-12.188 14.625 0 8.284 6.716 15 15 15h1v-11.562c-1.221-1.096-2-2.66-2-4.438 0-3.324 2.676-6 6-6h44c3.324 0 6 2.676 6 6 0 1.778-0.779 3.342-2 4.438v10.968c9.179-2.248 16-10.535 16-20.406 0-11.598-9.402-21-21-21-0.506 0-1.003 0.152-1.5 0.188-4.821-7.372-13.035-12.188-22.5-12.188zm-19 34c-1.108 0-2 0.892-2 2v44c0 1.108 0.892 2 2 2h44c1.108 0 2-0.892 2-2v-44c0-1.108-0.892-2-2-2h-44zm6 8h32v28h-32v-28zm16 4l-10 11h5v9h10v-9h5l-10-11z" />
+      <path
+      	 class="button-icon-fill"
+         d="m45 7c-14.015 0-25.478 10.711-26.812 24.375-6.926 1.328-12.188 7.313-12.188 14.625 0 8.284 6.716 15 15 15h1v-11.562c-1.221-1.096-2-2.66-2-4.438 0-3.324 2.676-6 6-6h44c3.324 0 6 2.676 6 6 0 1.778-0.779 3.342-2 4.438v10.968c9.179-2.248 16-10.535 16-20.406 0-11.598-9.402-21-21-21-0.506 0-1.003 0.152-1.5 0.188-4.821-7.372-13.035-12.188-22.5-12.188zm-19 34c-1.108 0-2 0.892-2 2v44c0 1.108 0.892 2 2 2h44c1.108 0 2-0.892 2-2v-44c0-1.108-0.892-2-2-2h-44zm6 8h32v28h-32v-28zm16 4l-10 11h5v9h10v-9h5l-10-11z" />
+    </svg>
+    <span class="button-text">Send a Photo</span></button>
 </div>
 
-<!-- About -->
+<!-- About Dialog -->
 <div id="about" class="modal">
     <div>
-        <a href="#" class="close"><span><svg height="24" width="24" version="1.1" xmlns="http://www.w3.org/2000/svg" style="overflow: hidden; position: relative;" >
-  <path
-  	 class="close-icon-back"
-     d="M 23,12 A 11,11 0 0 1 1,12 11,11 0 1 1 23,12 z" />
-  <path
-  	 class="close-icon-fill"
-     d="M 12,0 C 5.3726,0 0,5.3726 0,12 0,18.627 5.3726,24 12,24 18.627,24 24,18.627 24,12 24,5.3726 18.627,0 12,0 z m 0,2 C 17.523,2 22,6.4772 22,12 22,17.523 17.523,22 12,22 6.4772,22 2,17.523 2,12 2,6.4772 6.4772,2 12,2 z M 8,8 V 9 C 8,9.277 8.1005,9.538 8.2812,9.7188 L 10.562,12 8.2812,14.281 C 8.1005,14.462 8.0994,14.741 8,15 v 1 h 1 c 0.277,0 0.538,-0.1005 0.71875,-0.28125 l 2.2812,-2.281 2.281,2.281 c 0.181,0.181 0.454,0.201 0.719,0.281 h 1 v -1 c 0,-0.277 -0.1005,-0.538 -0.28125,-0.71875 L 13.4377,12 15.7187,9.7188 C 15.8997,9.538 15.9997,9.277 15.9997,9 V 8 h -1 c -0.277,0 -0.538,0.1005 -0.719,0.2812 L 11.9997,10.562 9.7185,8.2812 C 9.5377,8.1005 9.2767,8 8.9997,8 z" />
-</svg></span></a>
+        <a href="#" class="close">
+            <span><svg height="24" width="24" version="1.1" xmlns="http://www.w3.org/2000/svg" style="overflow: hidden; position: relative;" >
+              <path
+              	 class="close-icon-back"
+                 d="M 23,12 A 11,11 0 0 1 1,12 11,11 0 1 1 23,12 z" />
+              <path
+              	 class="close-icon-fill"
+                 d="M 12,0 C 5.3726,0 0,5.3726 0,12 0,18.627 5.3726,24 12,24 18.627,24 24,18.627 24,12 24,5.3726 18.627,0 12,0 z m 0,2 C 17.523,2 22,6.4772 22,12 22,17.523 17.523,22 12,22 6.4772,22 2,17.523 2,12 2,6.4772 6.4772,2 12,2 z M 8,8 V 9 C 8,9.277 8.1005,9.538 8.2812,9.7188 L 10.562,12 8.2812,14.281 C 8.1005,14.462 8.0994,14.741 8,15 v 1 h 1 c 0.277,0 0.538,-0.1005 0.71875,-0.28125 l 2.2812,-2.281 2.281,2.281 c 0.181,0.181 0.454,0.201 0.719,0.281 h 1 v -1 c 0,-0.277 -0.1005,-0.538 -0.28125,-0.71875 L 13.4377,12 15.7187,9.7188 C 15.8997,9.538 15.9997,9.277 15.9997,9 V 8 h -1 c -0.277,0 -0.538,0.1005 -0.719,0.2812 L 11.9997,10.562 9.7185,8.2812 C 9.5377,8.1005 9.2767,8 8.9997,8 z" />
+            </svg></span>
+        </a>    
         <h1>soonsnap</h1>
         <p>Share just-taken photos  with people standing next to you.</p>
         <p>Soonsnap is <a href="https://github.com/stuartlangridge/pubphoto">open source</a> &amp; is licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0.html" target="_blank">Apache License 2.0</a></p>
@@ -568,34 +662,47 @@ body.not-supports-download-attr #wait_for_transmission.completed p.no-download-a
     </div>
 </div>
 
+
+<!-- Waiting -->
 <div id="wait_for_transmission" class="page waiting">
     <p class="waiting">Waiting for the photo...</p>
-	<a id="download" class="completed" href="#" download="image.jpg"><svg height="96" width="96" version="1.1" xmlns="http://www.w3.org/2000/svg" style="overflow: hidden; position: absolute; left: 50%; margin-left: -48px; top: 5px;" >
-  <path
-  	 class="button-icon-shadow"
-     d="m51 8c-9.465 0-17.679 4.816-22.5 12.188-0.497-0.036-0.994-0.188-1.5-0.188-11.598 0-21 9.402-21 21 0 9.871 6.821 18.158 16 20.406v-10.968c-1.221-1.096-2-2.66-2-4.438 0-3.324 2.676-6 6-6h44c3.324 0 6 2.676 6 6 0 1.778-0.779 3.342-2 4.438v11.562h1c8.284 0 15-6.716 15-15 0-7.312-5.262-13.297-12.188-14.625-1.334-13.664-12.797-24.375-26.812-24.375zm-25 34c-1.108 0-2 0.892-2 2v44c0 1.108 0.892 2 2 2h44c1.108 0 2-0.892 2-2v-44c0-1.108-0.892-2-2-2h-44zm6 8h32v28h-32v-28zm11 6v9h-5l10 11 10-11h-5v-9h-10z" />
-  <path
-  	 class="button-icon-fill"
-     d="m51 7c-9.465 0-17.679 4.816-22.5 12.188-0.497-0.036-0.994-0.188-1.5-0.188-11.598 0-21 9.402-21 21 0 9.871 6.821 18.158 16 20.406v-10.968c-1.221-1.096-2-2.66-2-4.438 0-3.324 2.676-6 6-6h44c3.324 0 6 2.676 6 6 0 1.778-0.779 3.342-2 4.438v11.562h1c8.284 0 15-6.716 15-15 0-7.312-5.262-13.297-12.188-14.625-1.334-13.664-12.797-24.375-26.812-24.375zm-25 34c-1.108 0-2 0.892-2 2v44c0 1.108 0.892 2 2 2h44c1.108 0 2-0.892 2-2v-44c0-1.108-0.892-2-2-2h-44zm6 8h32v28h-32v-28zm11 6v9h-5l10 11 10-11h-5v-9h-10z" />
-</svg><span class="button-text">Save Photo</span></a>
-    <p class="no-download-attr completed">Now press and hold on the image and say "Save Image" to save it to your photos</p>
+	<a id="download" class="completed" href="#" download="image.jpg">
+    <svg height="96" width="96" version="1.1" xmlns="http://www.w3.org/2000/svg" style="overflow: hidden; position: absolute; left: 50%; margin-left: -48px; top: 5px;" >
+      <path
+      	 class="button-icon-shadow"
+         d="m51 8c-9.465 0-17.679 4.816-22.5 12.188-0.497-0.036-0.994-0.188-1.5-0.188-11.598 0-21 9.402-21 21 0 9.871 6.821 18.158 16 20.406v-10.968c-1.221-1.096-2-2.66-2-4.438 0-3.324 2.676-6 6-6h44c3.324 0 6 2.676 6 6 0 1.778-0.779 3.342-2 4.438v11.562h1c8.284 0 15-6.716 15-15 0-7.312-5.262-13.297-12.188-14.625-1.334-13.664-12.797-24.375-26.812-24.375zm-25 34c-1.108 0-2 0.892-2 2v44c0 1.108 0.892 2 2 2h44c1.108 0 2-0.892 2-2v-44c0-1.108-0.892-2-2-2h-44zm6 8h32v28h-32v-28zm11 6v9h-5l10 11 10-11h-5v-9h-10z" />
+      <path
+      	 class="button-icon-fill"
+         d="m51 7c-9.465 0-17.679 4.816-22.5 12.188-0.497-0.036-0.994-0.188-1.5-0.188-11.598 0-21 9.402-21 21 0 9.871 6.821 18.158 16 20.406v-10.968c-1.221-1.096-2-2.66-2-4.438 0-3.324 2.676-6 6-6h44c3.324 0 6 2.676 6 6 0 1.778-0.779 3.342-2 4.438v11.562h1c8.284 0 15-6.716 15-15 0-7.312-5.262-13.297-12.188-14.625-1.334-13.664-12.797-24.375-26.812-24.375zm-25 34c-1.108 0-2 0.892-2 2v44c0 1.108 0.892 2 2 2h44c1.108 0 2-0.892 2-2v-44c0-1.108-0.892-2-2-2h-44zm6 8h32v28h-32v-28zm11 6v9h-5l10 11 10-11h-5v-9h-10z" />
+    </svg>
+    <span class="button-text">Save Photo</span></a>
+    <p class="no-download-attr completed">Press &amp; hold the image to save it to your device.</p>
 	<div class="received-image"><img></div>
 </div>
 
+<!-- Send Page 1 -->
 <div id="sendp1" class="page">
 	<input class="custom-file-input" type="file" xcapture="camera" xcapture accept="image/*" id="cameraInput">
-</div>
+</div></a>
 
+<!-- Send Page 2 -->
 <div id="sendp2" class="page sending">
 	<div class="page-content">
 		<p class="sending">Tell the recipient of your photo to go to soonsnap.com, press "Receive a Photo",
 		then enter their secret key: </p>
 		<p class="secret-key sending">x</p>
-		<p id="send_status" class="sending received">waiting for them to start&hellip;</p>
-		<p class="received"><a href="/">Send another photo</a></p>
+		<p id="send_status" class="sending received">Waiting for them to start&hellip;
+            <div id="loader" class="">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </p>
+		<div id="send_another" class="invisible"><a href="/" class="received button-text">Send another photo?</a></div>
 	</div>
 </div>
 
+<!-- Error -->
 <div id="server-error" class="page">
 	<div class="page-content">
 	<p>There was a problem. :-(</p>
@@ -605,6 +712,7 @@ body.not-supports-download-attr #wait_for_transmission.completed p.no-download-a
 </div>
 
 
+<!-- Scripts -->
 <script src="/socket.io/socket.io.js"></script>
 <script src="/megapix-image.js"></script>
 <script>
@@ -731,6 +839,7 @@ function sendhdl(e) {
         socket.on('transmit_now', function () {
             socket.on('got_all', function () {
                 document.getElementById("send_status").firstChild.nodeValue = "Received OK!";
+                document.getElementById("loader").classList.add("invisible");
                 var sendp2 = document.getElementById("sendp2");
                 // set explicit heights so that the transition works
                 [].slice.call(sendp2.querySelectorAll("p")).forEach(function(p) {
@@ -742,6 +851,7 @@ function sendhdl(e) {
                     sendp2.classList.remove("end-sending");
                     sendp2.classList.add("received");
                 }, 600);
+                document.getElementById("send_another").classList.remove("invisible");
             });
             document.getElementById("send_status").firstChild.nodeValue = "Sending...";
             console.log("got transmit_now; now transmitting data url");
