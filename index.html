@@ -10,7 +10,10 @@
     <title>soonsnap :: share just-taken photos with people standing next to you</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, user-scalable=no, minimal-ui">
+    <meta name="theme-color" content="#2A8DCB">
+
     <link rel="icon" type="image/png" href="/icon-16.png">
+    <link rel="manifest" href="/manifest.json">
     <link href='http://fonts.googleapis.com/css?family=Bitter:400,700' rel='stylesheet' type='text/css'>
 
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="icon-144.png">
@@ -240,12 +243,12 @@ html, body {
 }
 
 .button-icon-fill {
-    fill:#fff; 
+    fill:#fff;
 }
 
 .button-icon-shadow {
     fill:#000;
-    opacity:0.2; 
+    opacity:0.2;
 }
 
 label.file-input-button {
@@ -479,12 +482,12 @@ label.file-input-button input {
 }
 
 .close-icon-fill {
-    fill:#fff; 
+    fill:#fff;
 }
 
 .close-icon-back {
     fill:#000;
-    opacity:0.8; 
+    opacity:0.8;
 }
 
 #wait_for_transmission.waiting .waiting { display: block; }
@@ -532,7 +535,7 @@ body.not-supports-download-attr #wait_for_transmission.completed p.no-download-a
 }
 
 #loader {
-    text-align: center;    
+    text-align: center;
 }
 
 .invisible {
@@ -660,7 +663,7 @@ body.not-supports-download-attr #wait_for_transmission.completed p.no-download-a
               	 class="close-icon-fill"
                  d="M 12,0 C 5.3726,0 0,5.3726 0,12 0,18.627 5.3726,24 12,24 18.627,24 24,18.627 24,12 24,5.3726 18.627,0 12,0 z m 0,2 C 17.523,2 22,6.4772 22,12 22,17.523 17.523,22 12,22 6.4772,22 2,17.523 2,12 2,6.4772 6.4772,2 12,2 z M 8,8 V 9 C 8,9.277 8.1005,9.538 8.2812,9.7188 L 10.562,12 8.2812,14.281 C 8.1005,14.462 8.0994,14.741 8,15 v 1 h 1 c 0.277,0 0.538,-0.1005 0.71875,-0.28125 l 2.2812,-2.281 2.281,2.281 c 0.181,0.181 0.454,0.201 0.719,0.281 h 1 v -1 c 0,-0.277 -0.1005,-0.538 -0.28125,-0.71875 L 13.4377,12 15.7187,9.7188 C 15.8997,9.538 15.9997,9.277 15.9997,9 V 8 h -1 c -0.277,0 -0.538,0.1005 -0.719,0.2812 L 11.9997,10.562 9.7185,8.2812 C 9.5377,8.1005 9.2767,8 8.9997,8 z" />
             </svg></span>
-        </a>    
+        </a>
         <h1>soonsnap</h1>
         <p>Share just-taken photos  with people standing next to you.</p>
         <p>Soonsnap is <a href="https://github.com/stuartlangridge/pubphoto">open source</a> &amp; is licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0.html" target="_blank">Apache License 2.0</a></p>
@@ -869,7 +872,7 @@ for (var codechar=0; codechar < CODE_LENGTH; codechar++) {
         backspace.innerHTML = "&times;";
         backspace.className = "backspace";
         BUTTONS_PAGES[codechar].appendChild(backspace);
-        
+
         function bshdl(e) {
             e.preventDefault();
             Array.prototype.slice.call(document.querySelectorAll("h1.key")).forEach(function(key) {
@@ -882,7 +885,7 @@ for (var codechar=0; codechar < CODE_LENGTH; codechar++) {
             });
             BUTTONS_PAGES[0].classList.add("active");
         }
-        
+
         backspace.addEventListener("click", bshdl, false);
         backspace.addEventListener("touchstart", bshdl, false);
     }
@@ -952,7 +955,7 @@ ci.addEventListener("change", function(e) {
         document.querySelector(".secret-key").innerHTML = '<small>calculating&hellip;</small>';
         document.getElementById("sendp1").classList.remove("active");
         document.getElementById("sendp2").classList.add("active");
-    
+
         var img = new Image();
         img.onload = function() {
             console.log("img onload after", (new Date().getTime()) - now); now = (new Date()).getTime();

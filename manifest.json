@@ -1,0 +1,14 @@
+{
+  "name": "HTML5Rocks updates",
+  "short_name": "HTML5Rocks updates",
+  "icons": [
+    {
+      "src": "/icon-144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "density": "1"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone"
+}

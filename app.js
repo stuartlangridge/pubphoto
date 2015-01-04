@@ -28,6 +28,9 @@ CHARS.forEach(function(c1) {
 app.get('/', function (req, res) {
   res.sendfile(__dirname + '/index.html');
 });
+app.get('/manifest.json', function (req, res) {
+  res.sendfile(__dirname + '/manifest.json');
+});
 app.get('/megapix-image.js', function (req, res) {
   res.sendfile(__dirname + '/megapix-image.js');
 });
@@ -66,14 +69,14 @@ setInterval(function() {
 
 io.sockets.on('connection', function (socket) {
     var slot;
-  
+
     socket.on("disconnect", function() {
         if (slot) {
             SLOTS[slot].allocated = false;
             console.log("Slot", slot, "vanished; freeing it.");
         }
     });
-  
+
     socket.on("request_slot", function request_slot() {
         var keys = Object.keys(SLOTS).slice(0);
         shuffle(keys);
@@ -94,15 +97,15 @@ io.sockets.on('connection', function (socket) {
             setTimeout(request_slot, 500);
         }
     });
-  
+
     socket.on("request_from_slot", function(data) {
         if (!data.slot) {
             return socket.emit("servererror", {code: "no_slot", text: "No slot specified"});
         }
-        if (!SLOTS[data.slot]) { 
+        if (!SLOTS[data.slot]) {
             return socket.emit("servererror", {code: "bad_slot", text: "Bad slot specified"});
         }
-        if (!SLOTS[data.slot].allocated) { 
+        if (!SLOTS[data.slot].allocated) {
             return socket.emit("servererror", {code: "old_slot", text: "That code has run out. Ask them to send the image again."});
         }
         SLOTS[data.slot].receiver = socket.id;
@@ -110,7 +113,7 @@ io.sockets.on('connection', function (socket) {
         io.sockets.socket(SLOTS[data.slot].sender).emit("transmit_now");
         slot = data.slot;
     });
-  
+
     socket.on("transmission", function(data) {
         if (!SLOTS[slot].allocated) {
             return socket.emit("servererror", {code: "old_slot", text: "That code has run out. Ask them to send the image again."});
@@ -125,7 +128,7 @@ io.sockets.on('connection', function (socket) {
         // and bump the timestamp so we don't garbage collect it mid-transmission
         SLOTS[slot].timestamp = (new Date()).getTime();
     });
-  
+
     socket.on("got_all", function() {
         // receiver has received everything; tear it all down
         io.sockets.socket(SLOTS[slot].sender).emit("got_all");
