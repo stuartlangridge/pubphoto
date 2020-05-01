@@ -24,5 +24,5 @@ And here's the idea:
  3. They do it: it gives them the photo
  4. You say "there you go", they say "thank you!", and another little human interaction is improved with technology without getting in the way
 
-Concept and written by Stuart "@sil" Langridge; visual design by Sam "@snwh" Hewitt.
+Concept and written by Stuart "@sil" Langridge; visual design by Sam "@snwh" Hewitt. Some more discursive thoughts on the design thinking that Stuart put into the way Soonsnap works are available [on Stuart's weblog](https://www.kryogenix.org/days/2014/05/13/some-thoughts-on-soonsnap-and-little-big-details/) if you're interested.
 
